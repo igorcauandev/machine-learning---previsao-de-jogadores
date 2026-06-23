@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scout ML — Previsão de Jogadores</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@400;500;600&display=swap');
+:root{
+  --pitch:#061a0e;--pitch-l:#0a2a16;--grass:#16a34a;--line:#22c55e;
+  --gold:#facc15;--white:#f0fdf4;--muted:#86efac;--card:#0d2218;
+  --border:#173523;--danger:#ef4444;--warn:#f97316;--radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--pitch);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;}
+header{background:var(--pitch-l);border-bottom:2px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:14px;}
+.logo{width:38px;height:38px;background:var(--gold);border-radius:50%;display:grid;place-items:center;font-size:20px;flex-shrink:0;}
+header h1{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:3px;text-transform:uppercase;}
+header h1 span{color:var(--gold);}
+.badge{margin-left:auto;background:#0f3320;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
+nav{display:flex;gap:2px;padding:0 28px;background:var(--pitch-l);border-bottom:1px solid var(--border);overflow-x:auto;}
+nav button{background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:12px 18px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
+nav button:hover{color:var(--white);}
+nav button.active{color:var(--gold);border-bottom-color:var(--gold);}
+.page{display:none;padding:24px 28px;}
+.page.active{display:block;}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+@media(max-width:860px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.slider-group{margin-bottom:13px;}
+.slider-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
+.slider-label .sval{font-weight:700;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:17px;}
+input[type=range]{width:100%;height:5px;appearance:none;border-radius:3px;background:var(--border);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;}
+select{width:100%;padding:9px 12px;background:var(--pitch-l);color:var(--white);border:1px solid var(--border);border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;margin-bottom:12px;outline:none;}
+select:focus{border-color:var(--line);}
+.btn-predict{width:100%;background:var(--grass);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px;border-radius:var(--radius);cursor:pointer;transition:background .2s;margin-top:4px;}
+.btn-predict:hover{background:var(--line);}
+.btn-predict:disabled{opacity:.5;cursor:not-allowed;}
+.result-panel{background:var(--pitch-l);border:2px solid var(--line);border-radius:var(--radius);padding:22px;text-align:center;margin-top:14px;}
+.result-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.result-value{font-family:'Barlow Condensed',sans-serif;font-size:68px;font-weight:900;line-height:1;color:var(--gold);}
+.result-sub{font-size:12px;color:var(--muted);margin-top:8px;}
+.radar-wrap{position:relative;height:240px;}
+.stat-bar-row{margin-bottom:9px;}
+.stat-bar-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;}
+.stat-bar-track{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--grass),var(--gold));transition:width .6s ease;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:var(--pitch-l);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:9px 11px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;}
+thead th:hover{color:var(--gold);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s;}
+tbody tr:hover{background:var(--pitch-l);}
+tbody td{padding:8px 11px;}
+.pos-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.pos-Atacante{background:#0e2535;color:#38bdf8;}
+.pos-Meia{background:#132a16;color:#86efac;}
+.pos-Defensor{background:#2a1e0a;color:#fbbf24;}
+.pos-Goleiro{background:#2a1010;color:#f87171;}
+.pill-nota{display:inline-block;padding:2px 9px;border-radius:10px;font-weight:700;font-size:12px;}
+.search-bar{width:100%;padding:9px 14px;background:var(--pitch-l);color:var(--white);border:1px solid var(--border);border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:13px;outline:none;margin-bottom:14px;}
+.search-bar:focus{border-color:var(--line);}
+.search-bar::placeholder{color:var(--muted);opacity:.6;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:4px;}
+.stat-card .num{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--gold);line-height:1;}
+.stat-card .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.chart-wrap{position:relative;height:280px;}
+.filter-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.pill-btn{background:var(--pitch-l);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;transition:all .15s;}
+.pill-btn:hover,.pill-btn.active{background:var(--grass);border-color:var(--grass);color:#fff;}
+.metric-row{display:flex;gap:20px;margin-bottom:14px;}
+.metric-block .mnum{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--gold);line-height:1;}
+.metric-block .mlbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.loading-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px;}
+.loading-bar-fill{height:100%;background:linear-gradient(90deg,var(--grass),var(--gold));border-radius:2px;animation:loadanim 2s ease-in-out infinite;}
+@keyframes loadanim{0%{width:0%}50%{width:80%}100%{width:100%}}
+.mb14{margin-bottom:14px;} .mb20{margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚽</div>
+  <h1>Scout <span>ML</span></h1>
+  <div class="badge" id="badge">⏳ Treinando modelo...</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('previsao',this)">🎯 Nota Geral</button>
+  <button onclick="showPage('gols',this)">⚽ Gols na Temporada</button>
+  <button onclick="showPage('dados',this)">📊 Base de Dados</button>
+  <button onclick="showPage('modelo',this)">🧠 Modelo</button>
+</nav>
+
+<div class="page active" id="page-previsao">
+  <p class="section-title">Prever Nota Geral do Jogador</p>
+  <div class="grid-2">
+    <div>
+      <div class="card mb14">
+        <div class="card-title">Atributos Técnicos</div>
+        <div id="sliders-nota"></div>
+        <button class="btn-predict" id="btn-nota" onclick="preverNota()" disabled>⏳ Aguarde o modelo...</button>
+      </div>
+    </div>
+    <div>
+      <div class="result-panel">
+        <div class="result-label">Nota Geral Prevista</div>
+        <div class="result-value" id="nota-val">—</div>
+        <div class="result-sub" id="nota-tier">Ajuste os sliders e clique em Calcular</div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Radar de Atributos</div>
+        <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-gols">
+  <p class="section-title">Prever Gols na Temporada</p>
+  <div class="grid-2">
+    <div>
+      <div class="card mb14">
+        <div class="card-title">Perfil do Jogador</div>
+        <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:5px;letter-spacing:1px;text-transform:uppercase">Posição em Campo</label>
+        <select id="sel-posicao">
+          <option>Atacante</option><option>Meia</option>
+          <option>Defensor</option><option>Goleiro</option>
+        </select>
+        <div id="sliders-gols"></div>
+        <button class="btn-predict" id="btn-gols" onclick="preverGols()" disabled>⏳ Aguarde o modelo...</button>
+      </div>
+    </div>
+    <div>
+      <div class="result-panel">
+        <div class="result-label">Gols Previstos na Temporada</div>
+        <div class="result-value" id="gols-val">—</div>
+        <div class="result-sub" id="gols-tier">Ajuste os campos e clique em Calcular</div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Jogadores Similares na Base</div>
+        <div id="similares-list" style="font-size:12px;color:var(--muted)">Faça uma previsão para ver jogadores similares.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-dados">
+  <p class="section-title">Base de Dados</p>
+  <div class="grid-3 mb20" id="stats-top"></div>
+  <div class="filter-pills">
+    <div class="pill-btn active" onclick="filtrarPos('Todos',this)">Todos</div>
+    <div class="pill-btn" onclick="filtrarPos('Atacante',this)">Atacantes</div>
+    <div class="pill-btn" onclick="filtrarPos('Meia',this)">Meias</div>
+    <div class="pill-btn" onclick="filtrarPos('Defensor',this)">Defensores</div>
+    <div class="pill-btn" onclick="filtrarPos('Goleiro',this)">Goleiros</div>
+  </div>
+  <input class="search-bar" type="text" placeholder="🔍  Buscar jogador..." oninput="filtrarTabela(this.value)">
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28px">#</th>
+            <th onclick="sortTable('jogador')">Jogador ↕</th>
+            <th onclick="sortTable('posicao')">Posição ↕</th>
+            <th onclick="sortTable('nota_geral')">Nota ↕</th>
+            <th onclick="sortTable('velocidade')">Vel ↕</th>
+            <th onclick="sortTable('chute')">Chute ↕</th>
+            <th onclick="sortTable('passe')">Passe ↕</th>
+            <th onclick="sortTable('resistencia')">Resist ↕</th>
+            <th onclick="sortTable('drible')">Drible ↕</th>
+            <th onclick="sortTable('gols')">Gols ↕</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-modelo">
+  <p class="section-title">Desempenho do Modelo</p>
+  <div class="grid-2 mb20">
+    <div class="card">
+      <div class="card-title">Parte 1 — Nota Geral (Random Forest)</div>
+      <div class="metric-row">
+        <div class="metric-block"><div class="mnum">0.96</div><div class="mlbl">R²</div></div>
+        <div class="metric-block"><div class="mnum">2.17</div><div class="mlbl">MAE (pts)</div></div>
+        <div class="metric-block"><div class="mnum" style="color:var(--line)">✅</div><div class="mlbl">Boa capacidade</div></div>
+      </div>
+      <div class="card-title">Importância das Features</div>
+      <div id="feat-imp-nota"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Parte 2 — Gols (Random Forest)</div>
+      <div class="metric-row">
+        <div class="metric-block"><div class="mnum">0.87</div><div class="mlbl">R²</div></div>
+        <div class="metric-block"><div class="mnum">1.48</div><div class="mlbl">MAE (gols)</div></div>
+        <div class="metric-block"><div class="mnum" style="color:var(--line)">✅</div><div class="mlbl">Boa capacidade</div></div>
+      </div>
+      <div class="card-title">Importância das Features</div>
+      <div id="feat-imp-gols"></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Distribuição de Notas na Base</div>
+      <div class="chart-wrap"><canvas id="histNota"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Média de Gols por Posição</div>
+      <div class="chart-wrap"><canvas id="chartGolsPos"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const NOTAS = [{"jogador": "Vinicius Jr.", "velocidade": 96, "chute": 82, "passe": 78, "resistencia": 84, "drible": 92, "nota_geral": 91}, {"jogador": "Lionel Messi", "velocidade": 73, "chute": 88, "passe": 95, "resistencia": 72, "drible": 95, "nota_geral": 93}, {"jogador": "Kylian Mbappé", "velocidade": 97, "chute": 92, "passe": 83, "resistencia": 88, "drible": 90, "nota_geral": 93}, {"jogador": "Erling Haaland", "velocidade": 89, "chute": 94, "passe": 65, "resistencia": 80, "drible": 72, "nota_geral": 92}, {"jogador": "Rodri", "velocidade": 65, "chute": 71, "passe": 90, "resistencia": 93, "drible": 60, "nota_geral": 90}, {"jogador": "Kevin De Bruyne", "velocidade": 74, "chute": 86, "passe": 96, "resistencia": 84, "drible": 78, "nota_geral": 91}, {"jogador": "Pedri", "velocidade": 79, "chute": 78, "passe": 90, "resistencia": 86, "drible": 86, "nota_geral": 87}, {"jogador": "Lamine Yamal", "velocidade": 91, "chute": 80, "passe": 85, "resistencia": 80, "drible": 90, "nota_geral": 86}, {"jogador": "Bukayo Saka", "velocidade": 88, "chute": 82, "passe": 82, "resistencia": 87, "drible": 87, "nota_geral": 87}, {"jogador": "Harry Kane", "velocidade": 70, "chute": 91, "passe": 78, "resistencia": 82, "drible": 72, "nota_geral": 90}, {"jogador": "Rúben Dias", "velocidade": 64, "chute": 58, "passe": 72, "resistencia": 85, "drible": 45, "nota_geral": 87}, {"jogador": "Virgil van Dijk", "velocidade": 77, "chute": 63, "passe": 76, "resistencia": 86, "drible": 52, "nota_geral": 88}, {"jogador": "Thibaut Courtois", "velocidade": 45, "chute": 20, "passe": 30, "resistencia": 75, "drible": 15, "nota_geral": 88}, {"jogador": "Alisson Becker", "velocidade": 48, "chute": 20, "passe": 35, "resistencia": 75, "drible": 18, "nota_geral": 88}, {"jogador": "Raphinha", "velocidade": 87, "chute": 83, "passe": 80, "resistencia": 85, "drible": 85, "nota_geral": 86}, {"jogador": "Neymar Jr.", "velocidade": 90, "chute": 85, "passe": 87, "resistencia": 78, "drible": 93, "nota_geral": 87}, {"jogador": "Mohamed Salah", "velocidade": 88, "chute": 86, "passe": 78, "resistencia": 85, "drible": 88, "nota_geral": 89}, {"jogador": "Sadio Mané", "velocidade": 87, "chute": 82, "passe": 76, "resistencia": 88, "drible": 86, "nota_geral": 85}, {"jogador": "Robert Lewandowski", "velocidade": 72, "chute": 93, "passe": 72, "resistencia": 83, "drible": 74, "nota_geral": 91}, {"jogador": "Karim Benzema", "velocidade": 74, "chute": 88, "passe": 82, "resistencia": 80, "drible": 82, "nota_geral": 89}, {"jogador": "Antoine Griezmann", "velocidade": 78, "chute": 84, "passe": 85, "resistencia": 82, "drible": 80, "nota_geral": 88}, {"jogador": "Paulo Dybala", "velocidade": 78, "chute": 83, "passe": 87, "resistencia": 76, "drible": 88, "nota_geral": 87}, {"jogador": "Lautaro Martínez", "velocidade": 78, "chute": 88, "passe": 72, "resistencia": 82, "drible": 76, "nota_geral": 88}, {"jogador": "Marcus Rashford", "velocidade": 88, "chute": 80, "passe": 74, "resistencia": 84, "drible": 85, "nota_geral": 85}, {"jogador": "Jadon Sancho", "velocidade": 86, "chute": 78, "passe": 80, "resistencia": 80, "drible": 88, "nota_geral": 83}, {"jogador": "Phil Foden", "velocidade": 80, "chute": 82, "passe": 88, "resistencia": 82, "drible": 84, "nota_geral": 88}, {"jogador": "Jack Grealish", "velocidade": 80, "chute": 76, "passe": 82, "resistencia": 80, "drible": 86, "nota_geral": 84}, {"jogador": "Bernardo Silva", "velocidade": 80, "chute": 78, "passe": 90, "resistencia": 84, "drible": 82, "nota_geral": 87}, {"jogador": "Trent Alexander-Arnold", "velocidade": 74, "chute": 72, "passe": 92, "resistencia": 82, "drible": 70, "nota_geral": 87}, {"jogador": "Andrew Robertson", "velocidade": 82, "chute": 68, "passe": 84, "resistencia": 88, "drible": 72, "nota_geral": 85}, {"jogador": "João Cancelo", "velocidade": 82, "chute": 72, "passe": 86, "resistencia": 82, "drible": 76, "nota_geral": 85}, {"jogador": "Achraf Hakimi", "velocidade": 92, "chute": 74, "passe": 78, "resistencia": 84, "drible": 78, "nota_geral": 86}, {"jogador": "Theo Hernández", "velocidade": 90, "chute": 74, "passe": 76, "resistencia": 86, "drible": 76, "nota_geral": 85}, {"jogador": "Marquinhos", "velocidade": 68, "chute": 60, "passe": 80, "resistencia": 86, "drible": 58, "nota_geral": 87}, {"jogador": "David Alaba", "velocidade": 70, "chute": 68, "passe": 82, "resistencia": 84, "drible": 66, "nota_geral": 86}, {"jogador": "Antonio Rüdiger", "velocidade": 72, "chute": 62, "passe": 74, "resistencia": 88, "drible": 56, "nota_geral": 86}, {"jogador": "Jules Koundé", "velocidade": 76, "chute": 64, "passe": 78, "resistencia": 84, "drible": 64, "nota_geral": 85}, {"jogador": "Dayot Upamecano", "velocidade": 74, "chute": 60, "passe": 74, "resistencia": 86, "drible": 60, "nota_geral": 84}, {"jogador": "Matthijs de Ligt", "velocidade": 72, "chute": 62, "passe": 76, "resistencia": 86, "drible": 58, "nota_geral": 85}, {"jogador": "Kalidou Koulibaly", "velocidade": 70, "chute": 62, "passe": 72, "resistencia": 88, "drible": 54, "nota_geral": 85}, {"jogador": "Presnel Kimpembe", "velocidade": 72, "chute": 60, "passe": 72, "resistencia": 86, "drible": 56, "nota_geral": 83}, {"jogador": "Ederson", "velocidade": 52, "chute": 22, "passe": 38, "resistencia": 78, "drible": 20, "nota_geral": 87}, {"jogador": "Marc-André ter Stegen", "velocidade": 50, "chute": 22, "passe": 40, "resistencia": 76, "drible": 18, "nota_geral": 87}, {"jogador": "Gianluigi Donnarumma", "velocidade": 52, "chute": 20, "passe": 36, "resistencia": 78, "drible": 16, "nota_geral": 87}, {"jogador": "Keylor Navas", "velocidade": 50, "chute": 20, "passe": 34, "resistencia": 76, "drible": 16, "nota_geral": 85}, {"jogador": "Unai Simón", "velocidade": 48, "chute": 20, "passe": 34, "resistencia": 76, "drible": 16, "nota_geral": 84}, {"jogador": "Mike Maignan", "velocidade": 50, "chute": 20, "passe": 36, "resistencia": 78, "drible": 16, "nota_geral": 86}, {"jogador": "Ilkay Gündogan", "velocidade": 74, "chute": 78, "passe": 88, "resistencia": 84, "drible": 74, "nota_geral": 87}, {"jogador": "Joshua Kimmich", "velocidade": 76, "chute": 74, "passe": 90, "resistencia": 86, "drible": 72, "nota_geral": 89}, {"jogador": "Leon Goretzka", "velocidade": 78, "chute": 76, "passe": 82, "resistencia": 88, "drible": 72, "nota_geral": 86}, {"jogador": "Thomas Müller", "velocidade": 72, "chute": 76, "passe": 86, "resistencia": 82, "drible": 74, "nota_geral": 87}, {"jogador": "Leroy Sané", "velocidade": 90, "chute": 80, "passe": 78, "resistencia": 82, "drible": 86, "nota_geral": 86}, {"jogador": "Serge Gnabry", "velocidade": 86, "chute": 80, "passe": 76, "resistencia": 82, "drible": 82, "nota_geral": 84}, {"jogador": "Kingsley Coman", "velocidade": 88, "chute": 76, "passe": 74, "resistencia": 82, "drible": 84, "nota_geral": 84}, {"jogador": "Kai Havertz", "velocidade": 80, "chute": 80, "passe": 78, "resistencia": 82, "drible": 78, "nota_geral": 84}, {"jogador": "Timo Werner", "velocidade": 90, "chute": 76, "passe": 72, "resistencia": 84, "drible": 78, "nota_geral": 82}, {"jogador": "Christopher Nkunku", "velocidade": 84, "chute": 80, "passe": 82, "resistencia": 82, "drible": 82, "nota_geral": 86}, {"jogador": "Dušan Vlahović", "velocidade": 74, "chute": 88, "passe": 66, "resistencia": 80, "drible": 70, "nota_geral": 85}, {"jogador": "Tammy Abraham", "velocidade": 78, "chute": 80, "passe": 68, "resistencia": 80, "drible": 72, "nota_geral": 82}, {"jogador": "Lorenzo Pellegrini", "velocidade": 76, "chute": 78, "passe": 82, "resistencia": 82, "drible": 76, "nota_geral": 84}, {"jogador": "Nicolò Barella", "velocidade": 78, "chute": 76, "passe": 84, "resistencia": 86, "drible": 76, "nota_geral": 87}, {"jogador": "Marco Verratti", "velocidade": 72, "chute": 70, "passe": 90, "resistencia": 80, "drible": 80, "nota_geral": 86}, {"jogador": "Jorginho", "velocidade": 68, "chute": 70, "passe": 86, "resistencia": 80, "drible": 66, "nota_geral": 84}, {"jogador": "Franck Kessié", "velocidade": 76, "chute": 72, "passe": 78, "resistencia": 88, "drible": 68, "nota_geral": 84}, {"jogador": "Sergej Milinković-Savić", "velocidade": 80, "chute": 78, "passe": 82, "resistencia": 86, "drible": 74, "nota_geral": 86}, {"jogador": "Ciro Immobile", "velocidade": 74, "chute": 88, "passe": 68, "resistencia": 80, "drible": 70, "nota_geral": 85}, {"jogador": "Romelu Lukaku", "velocidade": 80, "chute": 86, "passe": 64, "resistencia": 84, "drible": 70, "nota_geral": 85}, {"jogador": "Edin Džeko", "velocidade": 72, "chute": 82, "passe": 68, "resistencia": 78, "drible": 68, "nota_geral": 82}, {"jogador": "Ivan Perišić", "velocidade": 82, "chute": 76, "passe": 78, "resistencia": 84, "drible": 78, "nota_geral": 84}, {"jogador": "Luka Modrić", "velocidade": 72, "chute": 76, "passe": 92, "resistencia": 80, "drible": 82, "nota_geral": 88}, {"jogador": "Mateo Kovačić", "velocidade": 74, "chute": 72, "passe": 86, "resistencia": 82, "drible": 78, "nota_geral": 85}, {"jogador": "Ivan Rakitić", "velocidade": 72, "chute": 74, "passe": 88, "resistencia": 80, "drible": 76, "nota_geral": 84}, {"jogador": "Mario Pašalić", "velocidade": 74, "chute": 74, "passe": 78, "resistencia": 82, "drible": 72, "nota_geral": 82}, {"jogador": "Marcelo Brozović", "velocidade": 72, "chute": 70, "passe": 86, "resistencia": 84, "drible": 70, "nota_geral": 85}, {"jogador": "Dejan Lovren", "velocidade": 66, "chute": 60, "passe": 70, "resistencia": 82, "drible": 54, "nota_geral": 80}, {"jogador": "Josip Šutalo", "velocidade": 68, "chute": 60, "passe": 72, "resistencia": 82, "drible": 56, "nota_geral": 80}, {"jogador": "Granit Xhaka", "velocidade": 70, "chute": 72, "passe": 82, "resistencia": 84, "drible": 66, "nota_geral": 84}, {"jogador": "Xherdan Shaqiri", "velocidade": 80, "chute": 76, "passe": 76, "resistencia": 78, "drible": 80, "nota_geral": 81}, {"jogador": "Manuel Akanji", "velocidade": 70, "chute": 62, "passe": 74, "resistencia": 84, "drible": 60, "nota_geral": 84}, {"jogador": "Yann Sommer", "velocidade": 50, "chute": 20, "passe": 36, "resistencia": 76, "drible": 16, "nota_geral": 85}, {"jogador": "Remo Freuler", "velocidade": 72, "chute": 68, "passe": 78, "resistencia": 82, "drible": 66, "nota_geral": 81}, {"jogador": "Fabian Schär", "velocidade": 68, "chute": 64, "passe": 72, "resistencia": 82, "drible": 58, "nota_geral": 82}, {"jogador": "Denis Zakaria", "velocidade": 74, "chute": 70, "passe": 76, "resistencia": 86, "drible": 66, "nota_geral": 82}, {"jogador": "Breel Embolo", "velocidade": 80, "chute": 76, "passe": 68, "resistencia": 82, "drible": 74, "nota_geral": 81}, {"jogador": "Rubén Vargas", "velocidade": 82, "chute": 74, "passe": 72, "resistencia": 80, "drible": 76, "nota_geral": 80}, {"jogador": "Álvaro Morata", "velocidade": 76, "chute": 82, "passe": 72, "resistencia": 80, "drible": 72, "nota_geral": 83}, {"jogador": "Dani Carvajal", "velocidade": 80, "chute": 68, "passe": 78, "resistencia": 84, "drible": 70, "nota_geral": 86}, {"jogador": "Ferland Mendy", "velocidade": 84, "chute": 64, "passe": 72, "resistencia": 86, "drible": 68, "nota_geral": 84}, {"jogador": "Eduardo Camavinga", "velocidade": 78, "chute": 70, "passe": 80, "resistencia": 84, "drible": 76, "nota_geral": 85}, {"jogador": "Aurélien Tchouaméni", "velocidade": 76, "chute": 72, "passe": 80, "resistencia": 86, "drible": 70, "nota_geral": 86}, {"jogador": "Adrien Rabiot", "velocidade": 76, "chute": 72, "passe": 78, "resistencia": 84, "drible": 70, "nota_geral": 83}, {"jogador": "Ousmane Dembélé", "velocidade": 90, "chute": 78, "passe": 76, "resistencia": 80, "drible": 88, "nota_geral": 86}, {"jogador": "Ansu Fati", "velocidade": 88, "chute": 78, "passe": 76, "resistencia": 78, "drible": 86, "nota_geral": 82}, {"jogador": "Ferran Torres", "velocidade": 86, "chute": 78, "passe": 76, "resistencia": 80, "drible": 82, "nota_geral": 83}, {"jogador": "Gavi", "velocidade": 76, "chute": 70, "passe": 88, "resistencia": 82, "drible": 80, "nota_geral": 86}, {"jogador": "Marcos Alonso", "velocidade": 76, "chute": 68, "passe": 74, "resistencia": 82, "drible": 66, "nota_geral": 81}, {"jogador": "Eric García", "velocidade": 68, "chute": 60, "passe": 72, "resistencia": 80, "drible": 58, "nota_geral": 80}, {"jogador": "Clément Lenglet", "velocidade": 68, "chute": 60, "passe": 72, "resistencia": 80, "drible": 56, "nota_geral": 79}, {"jogador": "Memphis Depay", "velocidade": 82, "chute": 84, "passe": 78, "resistencia": 78, "drible": 82, "nota_geral": 84}, {"jogador": "Frenkie de Jong", "velocidade": 76, "chute": 72, "passe": 86, "resistencia": 82, "drible": 78, "nota_geral": 87}, {"jogador": "Cody Gakpo", "velocidade": 84, "chute": 80, "passe": 76, "resistencia": 82, "drible": 80, "nota_geral": 84}, {"jogador": "Steven Bergwijn", "velocidade": 86, "chute": 76, "passe": 74, "resistencia": 80, "drible": 80, "nota_geral": 81}, {"jogador": "Wout Weghorst", "velocidade": 74, "chute": 80, "passe": 64, "resistencia": 82, "drible": 66, "nota_geral": 80}, {"jogador": "Davy Klaassen", "velocidade": 70, "chute": 68, "passe": 76, "resistencia": 80, "drible": 64, "nota_geral": 79}, {"jogador": "Nathan Aké", "velocidade": 70, "chute": 62, "passe": 72, "resistencia": 82, "drible": 58, "nota_geral": 82}, {"jogador": "Stefan de Vrij", "velocidade": 68, "chute": 60, "passe": 72, "resistencia": 82, "drible": 56, "nota_geral": 83}, {"jogador": "Denzel Dumfries", "velocidade": 86, "chute": 68, "passe": 72, "resistencia": 84, "drible": 68, "nota_geral": 83}, {"jogador": "Hakan Çalhanoğlu", "velocidade": 74, "chute": 76, "passe": 84, "resistencia": 82, "drible": 72, "nota_geral": 85}, {"jogador": "Edin Višća", "velocidade": 80, "chute": 74, "passe": 74, "resistencia": 78, "drible": 74, "nota_geral": 79}, {"jogador": "Oghenekaro Etebo", "velocidade": 72, "chute": 68, "passe": 74, "resistencia": 82, "drible": 66, "nota_geral": 78}, {"jogador": "Wilfried Zaha", "velocidade": 86, "chute": 76, "passe": 72, "resistencia": 78, "drible": 82, "nota_geral": 82}, {"jogador": "Eberechi Eze", "velocidade": 80, "chute": 76, "passe": 78, "resistencia": 78, "drible": 80, "nota_geral": 82}, {"jogador": "Michael Olise", "velocidade": 82, "chute": 78, "passe": 78, "resistencia": 78, "drible": 82, "nota_geral": 83}, {"jogador": "Richarlison", "velocidade": 78, "chute": 76, "passe": 68, "resistencia": 82, "drible": 72, "nota_geral": 78}, {"jogador": "Callum Wilson", "velocidade": 72, "chute": 78, "passe": 62, "resistencia": 78, "drible": 64, "nota_geral": 76}, {"jogador": "Che Adams", "velocidade": 76, "chute": 72, "passe": 64, "resistencia": 80, "drible": 68, "nota_geral": 74}, {"jogador": "Hwang Hee-chan", "velocidade": 82, "chute": 74, "passe": 64, "resistencia": 82, "drible": 72, "nota_geral": 75}, {"jogador": "Darwin Núñez", "velocidade": 86, "chute": 78, "passe": 60, "resistencia": 82, "drible": 68, "nota_geral": 77}, {"jogador": "Rasmus Højlund", "velocidade": 82, "chute": 76, "passe": 62, "resistencia": 80, "drible": 68, "nota_geral": 76}, {"jogador": "Evan Ferguson", "velocidade": 74, "chute": 76, "passe": 60, "resistencia": 76, "drible": 64, "nota_geral": 74}, {"jogador": "Alexis Mac Allister", "velocidade": 72, "chute": 70, "passe": 80, "resistencia": 82, "drible": 70, "nota_geral": 79}, {"jogador": "Moisés Caicedo", "velocidade": 74, "chute": 68, "passe": 76, "resistencia": 86, "drible": 66, "nota_geral": 78}, {"jogador": "Ryan Gravenberch", "velocidade": 76, "chute": 68, "passe": 78, "resistencia": 82, "drible": 68, "nota_geral": 77}, {"jogador": "Kobbie Mainoo", "velocidade": 72, "chute": 66, "passe": 74, "resistencia": 78, "drible": 68, "nota_geral": 74}, {"jogador": "Leny Yoro", "velocidade": 70, "chute": 60, "passe": 70, "resistencia": 80, "drible": 56, "nota_geral": 74}, {"jogador": "Castello Lukeba", "velocidade": 68, "chute": 58, "passe": 68, "resistencia": 80, "drible": 54, "nota_geral": 73}, {"jogador": "Oumar Diakhaby", "velocidade": 66, "chute": 56, "passe": 64, "resistencia": 78, "drible": 50, "nota_geral": 71}, {"jogador": "Maxime Lopez", "velocidade": 68, "chute": 62, "passe": 72, "resistencia": 76, "drible": 62, "nota_geral": 71}, {"jogador": "Jordan Pickford", "velocidade": 44, "chute": 18, "passe": 32, "resistencia": 74, "drible": 14, "nota_geral": 82}, {"jogador": "Sam Johnstone", "velocidade": 42, "chute": 16, "passe": 30, "resistencia": 72, "drible": 12, "nota_geral": 76}, {"jogador": "Vicente Guaita", "velocidade": 40, "chute": 16, "passe": 28, "resistencia": 70, "drible": 12, "nota_geral": 74}, {"jogador": "Scott Carson", "velocidade": 36, "chute": 14, "passe": 26, "resistencia": 66, "drible": 10, "nota_geral": 62}, {"jogador": "Adam Davies", "velocidade": 34, "chute": 12, "passe": 24, "resistencia": 64, "drible": 10, "nota_geral": 58}, {"jogador": "Tyler Roberts", "velocidade": 72, "chute": 62, "passe": 58, "resistencia": 72, "drible": 62, "nota_geral": 62}, {"jogador": "Sam Surridge", "velocidade": 68, "chute": 66, "passe": 54, "resistencia": 70, "drible": 58, "nota_geral": 60}, {"jogador": "Kieffer Moore", "velocidade": 66, "chute": 64, "passe": 50, "resistencia": 72, "drible": 50, "nota_geral": 61}, {"jogador": "Uche Ikpeazu", "velocidade": 74, "chute": 62, "passe": 48, "resistencia": 74, "drible": 56, "nota_geral": 59}, {"jogador": "Colby Bishop", "velocidade": 68, "chute": 64, "passe": 50, "resistencia": 70, "drible": 52, "nota_geral": 58}, {"jogador": "Harry Cornick", "velocidade": 76, "chute": 58, "passe": 54, "resistencia": 72, "drible": 62, "nota_geral": 57}, {"jogador": "Jonson Clarke-Harris", "velocidade": 64, "chute": 68, "passe": 48, "resistencia": 68, "drible": 48, "nota_geral": 60}, {"jogador": "Michael Smith", "velocidade": 64, "chute": 64, "passe": 46, "resistencia": 68, "drible": 44, "nota_geral": 58}, {"jogador": "Kayden Jackson", "velocidade": 72, "chute": 58, "passe": 48, "resistencia": 70, "drible": 56, "nota_geral": 56}, {"jogador": "Ryan Longman", "velocidade": 70, "chute": 56, "passe": 54, "resistencia": 68, "drible": 60, "nota_geral": 55}, {"jogador": "Bobby Thomas", "velocidade": 60, "chute": 50, "passe": 58, "resistencia": 72, "drible": 44, "nota_geral": 54}, {"jogador": "Will Lankshear", "velocidade": 68, "chute": 56, "passe": 46, "resistencia": 66, "drible": 52, "nota_geral": 52}, {"jogador": "Jamie McCart", "velocidade": 56, "chute": 44, "passe": 56, "resistencia": 70, "drible": 36, "nota_geral": 51}, {"jogador": "Luca Connell", "velocidade": 60, "chute": 50, "passe": 62, "resistencia": 68, "drible": 48, "nota_geral": 50}, {"jogador": "Ryan Strain", "velocidade": 62, "chute": 44, "passe": 54, "resistencia": 66, "drible": 44, "nota_geral": 50}, {"jogador": "Theo Archibald", "velocidade": 58, "chute": 38, "passe": 44, "resistencia": 56, "drible": 40, "nota_geral": 48}, {"jogador": "Cian Harries", "velocidade": 50, "chute": 36, "passe": 50, "resistencia": 62, "drible": 32, "nota_geral": 47}, {"jogador": "Ryan Astley", "velocidade": 48, "chute": 32, "passe": 48, "resistencia": 60, "drible": 28, "nota_geral": 46}, {"jogador": "Liam Gordon", "velocidade": 52, "chute": 34, "passe": 46, "resistencia": 58, "drible": 30, "nota_geral": 45}, {"jogador": "Jake Turner", "velocidade": 30, "chute": 20, "passe": 30, "resistencia": 58, "drible": 18, "nota_geral": 44}, {"jogador": "Ben Hinchliffe", "velocidade": 28, "chute": 18, "passe": 28, "resistencia": 56, "drible": 16, "nota_geral": 43}, {"jogador": "Luke Matheson", "velocidade": 56, "chute": 36, "passe": 44, "resistencia": 58, "drible": 38, "nota_geral": 48}, {"jogador": "Tom Brewitt", "velocidade": 46, "chute": 30, "passe": 44, "resistencia": 60, "drible": 26, "nota_geral": 46}, {"jogador": "Remeao Hutton", "velocidade": 62, "chute": 38, "passe": 42, "resistencia": 60, "drible": 40, "nota_geral": 47}, {"jogador": "Max Melbourne", "velocidade": 50, "chute": 32, "passe": 46, "resistencia": 56, "drible": 30, "nota_geral": 45}, {"jogador": "Kgaogelo Chauke", "velocidade": 60, "chute": 40, "passe": 42, "resistencia": 56, "drible": 42, "nota_geral": 49}, {"jogador": "Ellis Simms", "velocidade": 64, "chute": 44, "passe": 40, "resistencia": 58, "drible": 38, "nota_geral": 49}, {"jogador": "Rekeem Harper", "velocidade": 54, "chute": 38, "passe": 50, "resistencia": 60, "drible": 42, "nota_geral": 48}, {"jogador": "Theo Vassell", "velocidade": 60, "chute": 36, "passe": 44, "resistencia": 58, "drible": 36, "nota_geral": 46}, {"jogador": "Liam Bridcutt", "velocidade": 44, "chute": 30, "passe": 52, "resistencia": 60, "drible": 32, "nota_geral": 45}, {"jogador": "Zak Jules", "velocidade": 48, "chute": 28, "passe": 44, "resistencia": 62, "drible": 24, "nota_geral": 44}, {"jogador": "Nathan Baxter", "velocidade": 26, "chute": 16, "passe": 26, "resistencia": 54, "drible": 14, "nota_geral": 42}, {"jogador": "Pontus Dahlberg", "velocidade": 28, "chute": 18, "passe": 28, "resistencia": 52, "drible": 16, "nota_geral": 41}, {"jogador": "Tom King", "velocidade": 30, "chute": 20, "passe": 30, "resistencia": 56, "drible": 18, "nota_geral": 43}, {"jogador": "Will Jenkins-Davies", "velocidade": 56, "chute": 34, "passe": 42, "resistencia": 58, "drible": 36, "nota_geral": 47}, {"jogador": "Curtis Tilt", "velocidade": 44, "chute": 36, "passe": 48, "resistencia": 64, "drible": 28, "nota_geral": 53}, {"jogador": "Anthony O'Connor", "velocidade": 46, "chute": 34, "passe": 50, "resistencia": 66, "drible": 26, "nota_geral": 52}, {"jogador": "Ben Purrington", "velocidade": 56, "chute": 38, "passe": 54, "resistencia": 64, "drible": 44, "nota_geral": 55}, {"jogador": "George Johnston", "velocidade": 48, "chute": 34, "passe": 50, "resistencia": 66, "drible": 28, "nota_geral": 54}, {"jogador": "Corey Whelan", "velocidade": 52, "chute": 36, "passe": 54, "resistencia": 64, "drible": 36, "nota_geral": 53}, {"jogador": "Liam Lindsay", "velocidade": 46, "chute": 36, "passe": 48, "resistencia": 66, "drible": 26, "nota_geral": 52}, {"jogador": "Ciaran Brennan", "velocidade": 48, "chute": 32, "passe": 50, "resistencia": 62, "drible": 28, "nota_geral": 51}, {"jogador": "Frazer Blake-Tracy", "velocidade": 60, "chute": 48, "passe": 44, "resistencia": 62, "drible": 46, "nota_geral": 55}, {"jogador": "Kieran Dowell", "velocidade": 62, "chute": 52, "passe": 60, "resistencia": 60, "drible": 54, "nota_geral": 57}, {"jogador": "Regan Slater", "velocidade": 58, "chute": 46, "passe": 58, "resistencia": 62, "drible": 48, "nota_geral": 56}, {"jogador": "Josh Windass", "velocidade": 66, "chute": 58, "passe": 56, "resistencia": 64, "drible": 58, "nota_geral": 59}, {"jogador": "Mallik Wilks", "velocidade": 68, "chute": 56, "passe": 50, "resistencia": 62, "drible": 60, "nota_geral": 58}, {"jogador": "Florian Jozefzoon", "velocidade": 70, "chute": 54, "passe": 52, "resistencia": 60, "drible": 62, "nota_geral": 57}, {"jogador": "Tom Eaves", "velocidade": 60, "chute": 58, "passe": 42, "resistencia": 66, "drible": 40, "nota_geral": 56}, {"jogador": "Niall Canavan", "velocidade": 42, "chute": 30, "passe": 48, "resistencia": 66, "drible": 22, "nota_geral": 52}, {"jogador": "Sean Clare", "velocidade": 60, "chute": 48, "passe": 54, "resistencia": 62, "drible": 46, "nota_geral": 54}, {"jogador": "Josh Magennis", "velocidade": 64, "chute": 58, "passe": 44, "resistencia": 70, "drible": 44, "nota_geral": 58}, {"jogador": "Kyle Dempsey", "velocidade": 62, "chute": 50, "passe": 58, "resistencia": 64, "drible": 50, "nota_geral": 57}, {"jogador": "Alex Kenyon", "velocidade": 56, "chute": 44, "passe": 56, "resistencia": 64, "drible": 42, "nota_geral": 53}, {"jogador": "Louis Reed", "velocidade": 58, "chute": 44, "passe": 60, "resistencia": 62, "drible": 44, "nota_geral": 55}, {"jogador": "Liam Millar", "velocidade": 72, "chute": 58, "passe": 56, "resistencia": 66, "drible": 62, "nota_geral": 62}, {"jogador": "Tom Bradshaw", "velocidade": 62, "chute": 64, "passe": 48, "resistencia": 68, "drible": 46, "nota_geral": 62}, {"jogador": "Ryan Hardie", "velocidade": 68, "chute": 62, "passe": 50, "resistencia": 66, "drible": 56, "nota_geral": 61}, {"jogador": "Scott Twine", "velocidade": 64, "chute": 62, "passe": 64, "resistencia": 62, "drible": 60, "nota_geral": 64}, {"jogador": "Jake Forster-Caskey", "velocidade": 58, "chute": 52, "passe": 64, "resistencia": 64, "drible": 50, "nota_geral": 61}, {"jogador": "Callum Brittain", "velocidade": 68, "chute": 56, "passe": 60, "resistencia": 66, "drible": 58, "nota_geral": 63}, {"jogador": "Hiram Boateng", "velocidade": 70, "chute": 56, "passe": 58, "resistencia": 64, "drible": 60, "nota_geral": 62}, {"jogador": "Lewis Wing", "velocidade": 62, "chute": 58, "passe": 62, "resistencia": 64, "drible": 54, "nota_geral": 61}, {"jogador": "Denzeil Boadu", "velocidade": 72, "chute": 60, "passe": 50, "resistencia": 64, "drible": 60, "nota_geral": 62}, {"jogador": "Dan Nlundulu", "velocidade": 70, "chute": 62, "passe": 46, "resistencia": 66, "drible": 54, "nota_geral": 60}, {"jogador": "James Norwood", "velocidade": 64, "chute": 64, "passe": 50, "resistencia": 66, "drible": 50, "nota_geral": 63}, {"jogador": "Luke Varney", "velocidade": 66, "chute": 62, "passe": 52, "resistencia": 64, "drible": 48, "nota_geral": 60}, {"jogador": "Joe Ironside", "velocidade": 62, "chute": 64, "passe": 48, "resistencia": 68, "drible": 44, "nota_geral": 60}, {"jogador": "Nathan Sheron", "velocidade": 60, "chute": 56, "passe": 56, "resistencia": 66, "drible": 50, "nota_geral": 61}, {"jogador": "Nathan Broadhead", "velocidade": 70, "chute": 62, "passe": 58, "resistencia": 64, "drible": 62, "nota_geral": 64}, {"jogador": "Elliot Lee", "velocidade": 64, "chute": 60, "passe": 60, "resistencia": 62, "drible": 56, "nota_geral": 62}, {"jogador": "Kwame Poku", "velocidade": 74, "chute": 58, "passe": 56, "resistencia": 62, "drible": 64, "nota_geral": 63}, {"jogador": "Ben Killip", "velocidade": 24, "chute": 14, "passe": 24, "resistencia": 56, "drible": 12, "nota_geral": 41}, {"jogador": "Joel Dixon", "velocidade": 26, "chute": 16, "passe": 26, "resistencia": 58, "drible": 14, "nota_geral": 43}, {"jogador": "Matija Sarkic", "velocidade": 30, "chute": 22, "passe": 32, "resistencia": 60, "drible": 20, "nota_geral": 48}];
+const GOLS  = [{"jogador": "Vinicius Jr.", "posicao": "Atacante", "nota_geral": 91, "chute": 82, "jogos": 34, "assistencias": 11, "gols": 24}, {"jogador": "Lionel Messi", "posicao": "Atacante", "nota_geral": 93, "chute": 88, "jogos": 31, "assistencias": 18, "gols": 18}, {"jogador": "Kylian Mbappé", "posicao": "Atacante", "nota_geral": 93, "chute": 92, "jogos": 36, "assistencias": 7, "gols": 27}, {"jogador": "Erling Haaland", "posicao": "Atacante", "nota_geral": 92, "chute": 94, "jogos": 32, "assistencias": 3, "gols": 27}, {"jogador": "Rodri", "posicao": "Meia", "nota_geral": 90, "chute": 71, "jogos": 35, "assistencias": 8, "gols": 5}, {"jogador": "Kevin De Bruyne", "posicao": "Meia", "nota_geral": 91, "chute": 86, "jogos": 18, "assistencias": 10, "gols": 11}, {"jogador": "Pedri", "posicao": "Meia", "nota_geral": 87, "chute": 78, "jogos": 33, "assistencias": 9, "gols": 5}, {"jogador": "Lamine Yamal", "posicao": "Atacante", "nota_geral": 86, "chute": 80, "jogos": 35, "assistencias": 10, "gols": 11}, {"jogador": "Bukayo Saka", "posicao": "Atacante", "nota_geral": 87, "chute": 82, "jogos": 36, "assistencias": 13, "gols": 16}, {"jogador": "Harry Kane", "posicao": "Atacante", "nota_geral": 90, "chute": 91, "jogos": 34, "assistencias": 8, "gols": 27}, {"jogador": "Rúben Dias", "posicao": "Defensor", "nota_geral": 87, "chute": 58, "jogos": 33, "assistencias": 1, "gols": 1}, {"jogador": "Virgil van Dijk", "posicao": "Defensor", "nota_geral": 88, "chute": 63, "jogos": 32, "assistencias": 2, "gols": 2}, {"jogador": "Thibaut Courtois", "posicao": "Goleiro", "nota_geral": 88, "chute": 20, "jogos": 35, "assistencias": 0, "gols": 0}, {"jogador": "Alisson Becker", "posicao": "Goleiro", "nota_geral": 88, "chute": 20, "jogos": 34, "assistencias": 0, "gols": 0}, {"jogador": "Raphinha", "posicao": "Atacante", "nota_geral": 86, "chute": 83, "jogos": 35, "assistencias": 12, "gols": 16}, {"jogador": "Neymar Jr.", "posicao": "Atacante", "nota_geral": 87, "chute": 85, "jogos": 28, "assistencias": 12, "gols": 18}, {"jogador": "Mohamed Salah", "posicao": "Atacante", "nota_geral": 89, "chute": 86, "jogos": 35, "assistencias": 13, "gols": 25}, {"jogador": "Sadio Mané", "posicao": "Atacante", "nota_geral": 85, "chute": 82, "jogos": 32, "assistencias": 8, "gols": 16}, {"jogador": "Robert Lewandowski", "posicao": "Atacante", "nota_geral": 91, "chute": 93, "jogos": 34, "assistencias": 6, "gols": 30}, {"jogador": "Karim Benzema", "posicao": "Atacante", "nota_geral": 89, "chute": 88, "jogos": 29, "assistencias": 9, "gols": 19}, {"jogador": "Antoine Griezmann", "posicao": "Atacante", "nota_geral": 88, "chute": 84, "jogos": 35, "assistencias": 10, "gols": 17}, {"jogador": "Paulo Dybala", "posicao": "Atacante", "nota_geral": 87, "chute": 83, "jogos": 28, "assistencias": 8, "gols": 13}, {"jogador": "Lautaro Martínez", "posicao": "Atacante", "nota_geral": 88, "chute": 88, "jogos": 33, "assistencias": 5, "gols": 22}, {"jogador": "Marcus Rashford", "posicao": "Atacante", "nota_geral": 85, "chute": 80, "jogos": 33, "assistencias": 6, "gols": 17}, {"jogador": "Jadon Sancho", "posicao": "Atacante", "nota_geral": 83, "chute": 78, "jogos": 25, "assistencias": 5, "gols": 8}, {"jogador": "Phil Foden", "posicao": "Meia", "nota_geral": 88, "chute": 82, "jogos": 35, "assistencias": 11, "gols": 19}, {"jogador": "Jack Grealish", "posicao": "Meia", "nota_geral": 84, "chute": 76, "jogos": 30, "assistencias": 9, "gols": 7}, {"jogador": "Bernardo Silva", "posicao": "Meia", "nota_geral": 87, "chute": 78, "jogos": 36, "assistencias": 10, "gols": 11}, {"jogador": "Trent Alexander-Arnold", "posicao": "Defensor", "nota_geral": 87, "chute": 72, "jogos": 32, "assistencias": 11, "gols": 4}, {"jogador": "Andrew Robertson", "posicao": "Defensor", "nota_geral": 85, "chute": 68, "jogos": 33, "assistencias": 8, "gols": 2}, {"jogador": "João Cancelo", "posicao": "Defensor", "nota_geral": 85, "chute": 72, "jogos": 30, "assistencias": 7, "gols": 3}, {"jogador": "Achraf Hakimi", "posicao": "Defensor", "nota_geral": 86, "chute": 74, "jogos": 34, "assistencias": 8, "gols": 4}, {"jogador": "Theo Hernández", "posicao": "Defensor", "nota_geral": 85, "chute": 74, "jogos": 32, "assistencias": 6, "gols": 5}, {"jogador": "Marquinhos", "posicao": "Defensor", "nota_geral": 87, "chute": 60, "jogos": 33, "assistencias": 2, "gols": 3}, {"jogador": "David Alaba", "posicao": "Defensor", "nota_geral": 86, "chute": 68, "jogos": 28, "assistencias": 3, "gols": 2}, {"jogador": "Antonio Rüdiger", "posicao": "Defensor", "nota_geral": 86, "chute": 62, "jogos": 33, "assistencias": 1, "gols": 3}, {"jogador": "Jules Koundé", "posicao": "Defensor", "nota_geral": 85, "chute": 64, "jogos": 32, "assistencias": 2, "gols": 2}, {"jogador": "Dayot Upamecano", "posicao": "Defensor", "nota_geral": 84, "chute": 60, "jogos": 30, "assistencias": 1, "gols": 1}, {"jogador": "Matthijs de Ligt", "posicao": "Defensor", "nota_geral": 85, "chute": 62, "jogos": 31, "assistencias": 1, "gols": 2}, {"jogador": "Kalidou Koulibaly", "posicao": "Defensor", "nota_geral": 85, "chute": 62, "jogos": 30, "assistencias": 1, "gols": 2}, {"jogador": "Ederson", "posicao": "Goleiro", "nota_geral": 87, "chute": 22, "jogos": 35, "assistencias": 0, "gols": 0}, {"jogador": "Marc-André ter Stegen", "posicao": "Goleiro", "nota_geral": 87, "chute": 22, "jogos": 30, "assistencias": 0, "gols": 0}, {"jogador": "Gianluigi Donnarumma", "posicao": "Goleiro", "nota_geral": 87, "chute": 20, "jogos": 35, "assistencias": 0, "gols": 0}, {"jogador": "Keylor Navas", "posicao": "Goleiro", "nota_geral": 85, "chute": 20, "jogos": 28, "assistencias": 0, "gols": 0}, {"jogador": "Mike Maignan", "posicao": "Goleiro", "nota_geral": 86, "chute": 20, "jogos": 33, "assistencias": 0, "gols": 0}, {"jogador": "Ilkay Gündogan", "posicao": "Meia", "nota_geral": 87, "chute": 78, "jogos": 33, "assistencias": 9, "gols": 12}, {"jogador": "Joshua Kimmich", "posicao": "Meia", "nota_geral": 89, "chute": 74, "jogos": 34, "assistencias": 12, "gols": 7}, {"jogador": "Leon Goretzka", "posicao": "Meia", "nota_geral": 86, "chute": 76, "jogos": 30, "assistencias": 6, "gols": 8}, {"jogador": "Thomas Müller", "posicao": "Meia", "nota_geral": 87, "chute": 76, "jogos": 32, "assistencias": 14, "gols": 9}, {"jogador": "Leroy Sané", "posicao": "Atacante", "nota_geral": 86, "chute": 80, "jogos": 30, "assistencias": 9, "gols": 14}, {"jogador": "Serge Gnabry", "posicao": "Atacante", "nota_geral": 84, "chute": 80, "jogos": 26, "assistencias": 6, "gols": 10}, {"jogador": "Kingsley Coman", "posicao": "Atacante", "nota_geral": 84, "chute": 76, "jogos": 28, "assistencias": 7, "gols": 9}, {"jogador": "Kai Havertz", "posicao": "Atacante", "nota_geral": 84, "chute": 80, "jogos": 33, "assistencias": 5, "gols": 13}, {"jogador": "Christopher Nkunku", "posicao": "Atacante", "nota_geral": 86, "chute": 80, "jogos": 28, "assistencias": 8, "gols": 15}, {"jogador": "Dušan Vlahović", "posicao": "Atacante", "nota_geral": 85, "chute": 88, "jogos": 30, "assistencias": 3, "gols": 18}, {"jogador": "Nicolò Barella", "posicao": "Meia", "nota_geral": 87, "chute": 76, "jogos": 35, "assistencias": 10, "gols": 8}, {"jogador": "Marco Verratti", "posicao": "Meia", "nota_geral": 86, "chute": 70, "jogos": 28, "assistencias": 8, "gols": 3}, {"jogador": "Franck Kessié", "posicao": "Meia", "nota_geral": 84, "chute": 72, "jogos": 30, "assistencias": 4, "gols": 6}, {"jogador": "Sergej Milinković-Savić", "posicao": "Meia", "nota_geral": 86, "chute": 78, "jogos": 33, "assistencias": 8, "gols": 10}, {"jogador": "Ciro Immobile", "posicao": "Atacante", "nota_geral": 85, "chute": 88, "jogos": 30, "assistencias": 4, "gols": 20}, {"jogador": "Romelu Lukaku", "posicao": "Atacante", "nota_geral": 85, "chute": 86, "jogos": 28, "assistencias": 3, "gols": 16}, {"jogador": "Luka Modrić", "posicao": "Meia", "nota_geral": 88, "chute": 76, "jogos": 32, "assistencias": 9, "gols": 6}, {"jogador": "Mateo Kovačić", "posicao": "Meia", "nota_geral": 85, "chute": 72, "jogos": 30, "assistencias": 5, "gols": 4}, {"jogador": "Marcelo Brozović", "posicao": "Meia", "nota_geral": 85, "chute": 70, "jogos": 32, "assistencias": 6, "gols": 4}, {"jogador": "Ilkay Gündogan", "posicao": "Meia", "nota_geral": 87, "chute": 78, "jogos": 33, "assistencias": 9, "gols": 12}, {"jogador": "Granit Xhaka", "posicao": "Meia", "nota_geral": 84, "chute": 72, "jogos": 32, "assistencias": 6, "gols": 7}, {"jogador": "Yann Sommer", "posicao": "Goleiro", "nota_geral": 85, "chute": 20, "jogos": 34, "assistencias": 0, "gols": 0}, {"jogador": "Eduardo Camavinga", "posicao": "Meia", "nota_geral": 85, "chute": 70, "jogos": 30, "assistencias": 5, "gols": 4}, {"jogador": "Aurélien Tchouaméni", "posicao": "Meia", "nota_geral": 86, "chute": 72, "jogos": 32, "assistencias": 3, "gols": 3}, {"jogador": "Adrien Rabiot", "posicao": "Meia", "nota_geral": 83, "chute": 72, "jogos": 30, "assistencias": 5, "gols": 6}, {"jogador": "Ousmane Dembélé", "posicao": "Atacante", "nota_geral": 86, "chute": 78, "jogos": 33, "assistencias": 12, "gols": 10}, {"jogador": "Ansu Fati", "posicao": "Atacante", "nota_geral": 82, "chute": 78, "jogos": 22, "assistencias": 4, "gols": 7}, {"jogador": "Ferran Torres", "posicao": "Atacante", "nota_geral": 83, "chute": 78, "jogos": 28, "assistencias": 5, "gols": 10}, {"jogador": "Gavi", "posicao": "Meia", "nota_geral": 86, "chute": 70, "jogos": 34, "assistencias": 8, "gols": 5}, {"jogador": "Frenkie de Jong", "posicao": "Meia", "nota_geral": 87, "chute": 72, "jogos": 32, "assistencias": 6, "gols": 4}, {"jogador": "Cody Gakpo", "posicao": "Atacante", "nota_geral": 84, "chute": 80, "jogos": 32, "assistencias": 7, "gols": 14}, {"jogador": "Memphis Depay", "posicao": "Atacante", "nota_geral": 84, "chute": 84, "jogos": 26, "assistencias": 5, "gols": 12}, {"jogador": "Nathan Aké", "posicao": "Defensor", "nota_geral": 82, "chute": 62, "jogos": 28, "assistencias": 1, "gols": 1}, {"jogador": "Stefan de Vrij", "posicao": "Defensor", "nota_geral": 83, "chute": 60, "jogos": 29, "assistencias": 1, "gols": 1}, {"jogador": "Denzel Dumfries", "posicao": "Defensor", "nota_geral": 83, "chute": 68, "jogos": 30, "assistencias": 6, "gols": 3}, {"jogador": "Hakan Çalhanoğlu", "posicao": "Meia", "nota_geral": 85, "chute": 76, "jogos": 33, "assistencias": 8, "gols": 11}, {"jogador": "Wilfried Zaha", "posicao": "Atacante", "nota_geral": 82, "chute": 76, "jogos": 33, "assistencias": 6, "gols": 10}, {"jogador": "Eberechi Eze", "posicao": "Meia", "nota_geral": 82, "chute": 76, "jogos": 32, "assistencias": 7, "gols": 11}, {"jogador": "Michael Olise", "posicao": "Atacante", "nota_geral": 83, "chute": 78, "jogos": 28, "assistencias": 8, "gols": 10}, {"jogador": "Álvaro Morata", "posicao": "Atacante", "nota_geral": 83, "chute": 82, "jogos": 30, "assistencias": 4, "gols": 13}, {"jogador": "Dani Carvajal", "posicao": "Defensor", "nota_geral": 86, "chute": 68, "jogos": 30, "assistencias": 5, "gols": 2}, {"jogador": "Ferland Mendy", "posicao": "Defensor", "nota_geral": 84, "chute": 64, "jogos": 28, "assistencias": 3, "gols": 1}, {"jogador": "Lorenzo Pellegrini", "posicao": "Meia", "nota_geral": 84, "chute": 78, "jogos": 30, "assistencias": 7, "gols": 9}, {"jogador": "Tammy Abraham", "posicao": "Atacante", "nota_geral": 82, "chute": 80, "jogos": 28, "assistencias": 3, "gols": 12}, {"jogador": "Ivan Perišić", "posicao": "Meia", "nota_geral": 84, "chute": 76, "jogos": 32, "assistencias": 8, "gols": 8}, {"jogador": "Timo Werner", "posicao": "Atacante", "nota_geral": 82, "chute": 76, "jogos": 28, "assistencias": 6, "gols": 9}, {"jogador": "Jorginho", "posicao": "Meia", "nota_geral": 84, "chute": 70, "jogos": 30, "assistencias": 3, "gols": 4}, {"jogador": "Presnel Kimpembe", "posicao": "Defensor", "nota_geral": 83, "chute": 60, "jogos": 26, "assistencias": 0, "gols": 1}, {"jogador": "Unai Simón", "posicao": "Goleiro", "nota_geral": 84, "chute": 20, "jogos": 34, "assistencias": 0, "gols": 0}, {"jogador": "Remo Freuler", "posicao": "Meia", "nota_geral": 81, "chute": 68, "jogos": 30, "assistencias": 4, "gols": 4}, {"jogador": "Fabian Schär", "posicao": "Defensor", "nota_geral": 82, "chute": 64, "jogos": 30, "assistencias": 2, "gols": 3}, {"jogador": "Denis Zakaria", "posicao": "Meia", "nota_geral": 82, "chute": 70, "jogos": 26, "assistencias": 2, "gols": 3}, {"jogador": "Breel Embolo", "posicao": "Atacante", "nota_geral": 81, "chute": 76, "jogos": 28, "assistencias": 3, "gols": 8}, {"jogador": "Rubén Vargas", "posicao": "Atacante", "nota_geral": 80, "chute": 74, "jogos": 28, "assistencias": 4, "gols": 6}, {"jogador": "Xherdan Shaqiri", "posicao": "Meia", "nota_geral": 81, "chute": 76, "jogos": 26, "assistencias": 5, "gols": 6}, {"jogador": "Manuel Akanji", "posicao": "Defensor", "nota_geral": 84, "chute": 62, "jogos": 32, "assistencias": 1, "gols": 1}, {"jogador": "Edin Džeko", "posicao": "Atacante", "nota_geral": 82, "chute": 82, "jogos": 26, "assistencias": 3, "gols": 10}, {"jogador": "Ivan Rakitić", "posicao": "Meia", "nota_geral": 84, "chute": 74, "jogos": 30, "assistencias": 6, "gols": 5}, {"jogador": "Mario Pašalić", "posicao": "Meia", "nota_geral": 82, "chute": 74, "jogos": 30, "assistencias": 5, "gols": 7}, {"jogador": "Dejan Lovren", "posicao": "Defensor", "nota_geral": 80, "chute": 60, "jogos": 24, "assistencias": 0, "gols": 1}, {"jogador": "Josip Šutalo", "posicao": "Defensor", "nota_geral": 80, "chute": 60, "jogos": 26, "assistencias": 0, "gols": 0}, {"jogador": "Mateo Kovačić", "posicao": "Meia", "nota_geral": 85, "chute": 72, "jogos": 30, "assistencias": 5, "gols": 4}, {"jogador": "Presnel Kimpembe", "posicao": "Defensor", "nota_geral": 83, "chute": 60, "jogos": 26, "assistencias": 0, "gols": 1}, {"jogador": "Jack Grealish", "posicao": "Meia", "nota_geral": 84, "chute": 76, "jogos": 30, "assistencias": 9, "gols": 7}, {"jogador": "Bukayo Saka", "posicao": "Atacante", "nota_geral": 87, "chute": 82, "jogos": 36, "assistencias": 13, "gols": 16}, {"jogador": "Pedri", "posicao": "Meia", "nota_geral": 87, "chute": 78, "jogos": 33, "assistencias": 9, "gols": 5}, {"jogador": "Jadon Sancho", "posicao": "Atacante", "nota_geral": 83, "chute": 78, "jogos": 25, "assistencias": 5, "gols": 8}, {"jogador": "Wout Weghorst", "posicao": "Atacante", "nota_geral": 80, "chute": 80, "jogos": 24, "assistencias": 2, "gols": 6}, {"jogador": "Davy Klaassen", "posicao": "Meia", "nota_geral": 79, "chute": 68, "jogos": 26, "assistencias": 3, "gols": 4}, {"jogador": "Kalidou Koulibaly", "posicao": "Defensor", "nota_geral": 85, "chute": 62, "jogos": 30, "assistencias": 1, "gols": 2}, {"jogador": "Richarlison", "posicao": "Atacante", "nota_geral": 78, "chute": 76, "jogos": 28, "assistencias": 3, "gols": 8}, {"jogador": "Darwin Núñez", "posicao": "Atacante", "nota_geral": 77, "chute": 78, "jogos": 30, "assistencias": 4, "gols": 11}, {"jogador": "Rasmus Højlund", "posicao": "Atacante", "nota_geral": 76, "chute": 76, "jogos": 26, "assistencias": 2, "gols": 10}, {"jogador": "Evan Ferguson", "posicao": "Atacante", "nota_geral": 74, "chute": 76, "jogos": 22, "assistencias": 2, "gols": 7}, {"jogador": "Alexis Mac Allister", "posicao": "Meia", "nota_geral": 79, "chute": 70, "jogos": 32, "assistencias": 5, "gols": 6}, {"jogador": "Moisés Caicedo", "posicao": "Meia", "nota_geral": 78, "chute": 68, "jogos": 33, "assistencias": 2, "gols": 2}, {"jogador": "Ryan Gravenberch", "posicao": "Meia", "nota_geral": 77, "chute": 68, "jogos": 30, "assistencias": 3, "gols": 3}, {"jogador": "Kobbie Mainoo", "posicao": "Meia", "nota_geral": 74, "chute": 66, "jogos": 28, "assistencias": 2, "gols": 2}, {"jogador": "Leny Yoro", "posicao": "Defensor", "nota_geral": 74, "chute": 60, "jogos": 20, "assistencias": 0, "gols": 1}, {"jogador": "Castello Lukeba", "posicao": "Defensor", "nota_geral": 73, "chute": 58, "jogos": 26, "assistencias": 0, "gols": 0}, {"jogador": "Hwang Hee-chan", "posicao": "Atacante", "nota_geral": 75, "chute": 74, "jogos": 28, "assistencias": 3, "gols": 9}, {"jogador": "Callum Wilson", "posicao": "Atacante", "nota_geral": 76, "chute": 78, "jogos": 22, "assistencias": 2, "gols": 8}, {"jogador": "Sam Surridge", "posicao": "Atacante", "nota_geral": 60, "chute": 66, "jogos": 18, "assistencias": 1, "gols": 4}, {"jogador": "Kieffer Moore", "posicao": "Atacante", "nota_geral": 61, "chute": 64, "jogos": 20, "assistencias": 1, "gols": 5}, {"jogador": "Colby Bishop", "posicao": "Atacante", "nota_geral": 58, "chute": 64, "jogos": 18, "assistencias": 1, "gols": 4}, {"jogador": "Harry Cornick", "posicao": "Atacante", "nota_geral": 57, "chute": 58, "jogos": 20, "assistencias": 2, "gols": 3}, {"jogador": "Jonson Clarke-Harris", "posicao": "Atacante", "nota_geral": 60, "chute": 68, "jogos": 22, "assistencias": 1, "gols": 6}, {"jogador": "Michael Smith", "posicao": "Atacante", "nota_geral": 58, "chute": 64, "jogos": 20, "assistencias": 1, "gols": 4}, {"jogador": "Kayden Jackson", "posicao": "Atacante", "nota_geral": 56, "chute": 58, "jogos": 18, "assistencias": 1, "gols": 3}, {"jogador": "Tyler Roberts", "posicao": "Meia", "nota_geral": 62, "chute": 62, "jogos": 20, "assistencias": 2, "gols": 3}, {"jogador": "Maxime Lopez", "posicao": "Meia", "nota_geral": 71, "chute": 62, "jogos": 24, "assistencias": 3, "gols": 2}, {"jogador": "Luca Connell", "posicao": "Meia", "nota_geral": 50, "chute": 50, "jogos": 16, "assistencias": 1, "gols": 1}, {"jogador": "Ryan Longman", "posicao": "Atacante", "nota_geral": 55, "chute": 56, "jogos": 18, "assistencias": 1, "gols": 3}, {"jogador": "Jordan Pickford", "posicao": "Goleiro", "nota_geral": 82, "chute": 18, "jogos": 34, "assistencias": 0, "gols": 0}, {"jogador": "Sam Johnstone", "posicao": "Goleiro", "nota_geral": 76, "chute": 16, "jogos": 30, "assistencias": 0, "gols": 0}, {"jogador": "Vicente Guaita", "posicao": "Goleiro", "nota_geral": 74, "chute": 16, "jogos": 28, "assistencias": 0, "gols": 0}, {"jogador": "Scott Carson", "posicao": "Goleiro", "nota_geral": 62, "chute": 14, "jogos": 10, "assistencias": 0, "gols": 0}, {"jogador": "Adam Davies", "posicao": "Goleiro", "nota_geral": 58, "chute": 12, "jogos": 20, "assistencias": 0, "gols": 0}, {"jogador": "Jamie McCart", "posicao": "Defensor", "nota_geral": 51, "chute": 44, "jogos": 18, "assistencias": 0, "gols": 0}, {"jogador": "Bobby Thomas", "posicao": "Defensor", "nota_geral": 54, "chute": 50, "jogos": 20, "assistencias": 0, "gols": 0}, {"jogador": "Jake Turner", "posicao": "Goleiro", "nota_geral": 44, "chute": 20, "jogos": 18, "assistencias": 0, "gols": 0}, {"jogador": "Ben Hinchliffe", "posicao": "Goleiro", "nota_geral": 43, "chute": 18, "jogos": 12, "assistencias": 0, "gols": 0}, {"jogador": "Nathan Baxter", "posicao": "Goleiro", "nota_geral": 42, "chute": 16, "jogos": 20, "assistencias": 0, "gols": 0}, {"jogador": "Pontus Dahlberg", "posicao": "Goleiro", "nota_geral": 41, "chute": 18, "jogos": 10, "assistencias": 0, "gols": 0}, {"jogador": "Tom King", "posicao": "Goleiro", "nota_geral": 43, "chute": 20, "jogos": 15, "assistencias": 0, "gols": 0}, {"jogador": "Ben Killip", "posicao": "Goleiro", "nota_geral": 41, "chute": 14, "jogos": 8, "assistencias": 0, "gols": 0}, {"jogador": "Joel Dixon", "posicao": "Goleiro", "nota_geral": 43, "chute": 16, "jogos": 14, "assistencias": 0, "gols": 0}, {"jogador": "Matija Sarkic", "posicao": "Goleiro", "nota_geral": 48, "chute": 22, "jogos": 22, "assistencias": 0, "gols": 0}, {"jogador": "Cian Harries", "posicao": "Defensor", "nota_geral": 47, "chute": 36, "jogos": 20, "assistencias": 1, "gols": 1}, {"jogador": "Ryan Astley", "posicao": "Defensor", "nota_geral": 46, "chute": 32, "jogos": 18, "assistencias": 0, "gols": 0}, {"jogador": "Liam Gordon", "posicao": "Defensor", "nota_geral": 45, "chute": 34, "jogos": 22, "assistencias": 1, "gols": 1}, {"jogador": "Tom Brewitt", "posicao": "Defensor", "nota_geral": 46, "chute": 30, "jogos": 16, "assistencias": 0, "gols": 0}, {"jogador": "Zak Jules", "posicao": "Defensor", "nota_geral": 44, "chute": 28, "jogos": 20, "assistencias": 0, "gols": 0}, {"jogador": "Curtis Tilt", "posicao": "Defensor", "nota_geral": 53, "chute": 36, "jogos": 26, "assistencias": 2, "gols": 2}, {"jogador": "Anthony O'Connor", "posicao": "Defensor", "nota_geral": 52, "chute": 34, "jogos": 28, "assistencias": 1, "gols": 1}, {"jogador": "George Johnston", "posicao": "Defensor", "nota_geral": 54, "chute": 34, "jogos": 24, "assistencias": 1, "gols": 2}, {"jogador": "Corey Whelan", "posicao": "Defensor", "nota_geral": 53, "chute": 36, "jogos": 22, "assistencias": 1, "gols": 1}, {"jogador": "Liam Lindsay", "posicao": "Defensor", "nota_geral": 52, "chute": 36, "jogos": 25, "assistencias": 1, "gols": 2}, {"jogador": "Ciaran Brennan", "posicao": "Defensor", "nota_geral": 51, "chute": 32, "jogos": 20, "assistencias": 0, "gols": 1}, {"jogador": "Niall Canavan", "posicao": "Defensor", "nota_geral": 52, "chute": 30, "jogos": 28, "assistencias": 1, "gols": 2}, {"jogador": "Jake Forster-Caskey", "posicao": "Defensor", "nota_geral": 61, "chute": 52, "jogos": 30, "assistencias": 3, "gols": 3}, {"jogador": "Theo Archibald", "posicao": "Meia", "nota_geral": 48, "chute": 38, "jogos": 16, "assistencias": 2, "gols": 2}, {"jogador": "Remeao Hutton", "posicao": "Meia", "nota_geral": 47, "chute": 38, "jogos": 18, "assistencias": 2, "gols": 2}, {"jogador": "Max Melbourne", "posicao": "Meia", "nota_geral": 45, "chute": 32, "jogos": 12, "assistencias": 1, "gols": 1}, {"jogador": "Rekeem Harper", "posicao": "Meia", "nota_geral": 48, "chute": 38, "jogos": 20, "assistencias": 3, "gols": 3}, {"jogador": "Liam Bridcutt", "posicao": "Meia", "nota_geral": 45, "chute": 30, "jogos": 22, "assistencias": 2, "gols": 1}, {"jogador": "Regan Slater", "posicao": "Meia", "nota_geral": 56, "chute": 46, "jogos": 28, "assistencias": 4, "gols": 4}, {"jogador": "Kieran Dowell", "posicao": "Meia", "nota_geral": 57, "chute": 52, "jogos": 30, "assistencias": 5, "gols": 6}, {"jogador": "Kyle Dempsey", "posicao": "Meia", "nota_geral": 57, "chute": 50, "jogos": 28, "assistencias": 4, "gols": 5}, {"jogador": "Alex Kenyon", "posicao": "Meia", "nota_geral": 53, "chute": 44, "jogos": 24, "assistencias": 3, "gols": 3}, {"jogador": "Louis Reed", "posicao": "Meia", "nota_geral": 55, "chute": 44, "jogos": 26, "assistencias": 4, "gols": 4}, {"jogador": "Sean Clare", "posicao": "Meia", "nota_geral": 54, "chute": 48, "jogos": 24, "assistencias": 3, "gols": 4}, {"jogador": "Lewis Wing", "posicao": "Meia", "nota_geral": 61, "chute": 58, "jogos": 30, "assistencias": 5, "gols": 7}, {"jogador": "Callum Brittain", "posicao": "Meia", "nota_geral": 63, "chute": 56, "jogos": 32, "assistencias": 6, "gols": 7}, {"jogador": "Scott Twine", "posicao": "Meia", "nota_geral": 64, "chute": 62, "jogos": 32, "assistencias": 7, "gols": 8}, {"jogador": "Elliot Lee", "posicao": "Meia", "nota_geral": 62, "chute": 60, "jogos": 28, "assistencias": 5, "gols": 6}, {"jogador": "Nathan Sheron", "posicao": "Meia", "nota_geral": 61, "chute": 56, "jogos": 26, "assistencias": 4, "gols": 5}, {"jogador": "Luke Matheson", "posicao": "Atacante", "nota_geral": 48, "chute": 36, "jogos": 14, "assistencias": 1, "gols": 3}, {"jogador": "Kgaogelo Chauke", "posicao": "Atacante", "nota_geral": 49, "chute": 40, "jogos": 16, "assistencias": 2, "gols": 4}, {"jogador": "Ellis Simms", "posicao": "Atacante", "nota_geral": 49, "chute": 44, "jogos": 18, "assistencias": 2, "gols": 5}, {"jogador": "Theo Vassell", "posicao": "Atacante", "nota_geral": 46, "chute": 36, "jogos": 12, "assistencias": 1, "gols": 2}, {"jogador": "Will Jenkins-Davies", "posicao": "Atacante", "nota_geral": 47, "chute": 34, "jogos": 14, "assistencias": 1, "gols": 3}, {"jogador": "Ben Purrington", "posicao": "Atacante", "nota_geral": 55, "chute": 38, "jogos": 22, "assistencias": 2, "gols": 4}, {"jogador": "Frazer Blake-Tracy", "posicao": "Atacante", "nota_geral": 55, "chute": 48, "jogos": 24, "assistencias": 3, "gols": 6}, {"jogador": "Josh Windass", "posicao": "Atacante", "nota_geral": 59, "chute": 58, "jogos": 28, "assistencias": 5, "gols": 9}, {"jogador": "Mallik Wilks", "posicao": "Atacante", "nota_geral": 58, "chute": 56, "jogos": 26, "assistencias": 4, "gols": 8}, {"jogador": "Florian Jozefzoon", "posicao": "Atacante", "nota_geral": 57, "chute": 54, "jogos": 24, "assistencias": 3, "gols": 7}, {"jogador": "Tom Eaves", "posicao": "Atacante", "nota_geral": 56, "chute": 58, "jogos": 26, "assistencias": 2, "gols": 8}, {"jogador": "Josh Magennis", "posicao": "Atacante", "nota_geral": 58, "chute": 58, "jogos": 28, "assistencias": 3, "gols": 9}, {"jogador": "Liam Millar", "posicao": "Atacante", "nota_geral": 62, "chute": 58, "jogos": 30, "assistencias": 5, "gols": 10}, {"jogador": "Tom Bradshaw", "posicao": "Atacante", "nota_geral": 62, "chute": 64, "jogos": 30, "assistencias": 3, "gols": 11}, {"jogador": "Ryan Hardie", "posicao": "Atacante", "nota_geral": 61, "chute": 62, "jogos": 28, "assistencias": 4, "gols": 10}, {"jogador": "Dan Nlundulu", "posicao": "Atacante", "nota_geral": 60, "chute": 62, "jogos": 26, "assistencias": 2, "gols": 9}, {"jogador": "James Norwood", "posicao": "Atacante", "nota_geral": 63, "chute": 64, "jogos": 32, "assistencias": 4, "gols": 11}, {"jogador": "Luke Varney", "posicao": "Atacante", "nota_geral": 60, "chute": 62, "jogos": 28, "assistencias": 3, "gols": 9}, {"jogador": "Joe Ironside", "posicao": "Atacante", "nota_geral": 60, "chute": 64, "jogos": 28, "assistencias": 2, "gols": 10}, {"jogador": "Nathan Broadhead", "posicao": "Atacante", "nota_geral": 64, "chute": 62, "jogos": 30, "assistencias": 5, "gols": 12}, {"jogador": "Kwame Poku", "posicao": "Atacante", "nota_geral": 63, "chute": 58, "jogos": 28, "assistencias": 5, "gols": 10}, {"jogador": "Hiram Boateng", "posicao": "Atacante", "nota_geral": 62, "chute": 56, "jogos": 26, "assistencias": 4, "gols": 9}, {"jogador": "Denzeil Boadu", "posicao": "Atacante", "nota_geral": 62, "chute": 60, "jogos": 28, "assistencias": 4, "gols": 10}];
+
+// ── PRNG confiável (Mulberry32) ────────────────────────
+function mulberry32(seed) {
+  return function() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+// ── RANDOM FOREST ──────────────────────────────────────
+function variance(arr) {
+  if (!arr.length) return 0;
+  const m = arr.reduce((a, b) => a + b, 0) / arr.length;
+  return arr.reduce((a, b) => a + (b - m) ** 2, 0) / arr.length;
+}
+
+function buildTree(data, features, targetKey, depth, maxDepth, rng) {
+  // filtrar linhas inválidas
+  data = data.filter(d => d && d[targetKey] !== undefined && d[targetKey] !== null);
+  if (!data.length) return { leaf: true, value: 0 };
+
+  const vals = data.map(d => d[targetKey]);
+  const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+  if (depth >= maxDepth || data.length < 4) return { leaf: true, value: mean };
+
+  const nF = Math.max(1, Math.ceil(Math.sqrt(features.length)));
+  const shuffled = [...features].sort(() => rng() - .5).slice(0, nF);
+  let bestGain = -Infinity, bestFeat = null, bestThresh = null;
+
+  for (const feat of shuffled) {
+    const uniq = [...new Set(data.map(d => d[feat]).filter(v => v !== undefined))].sort((a, b) => a - b);
+    for (let i = 0; i < uniq.length - 1; i++) {
+      const thresh = (uniq[i] + uniq[i + 1]) / 2;
+      const L = data.filter(d => d[feat] <= thresh);
+      const R = data.filter(d => d[feat] > thresh);
+      if (!L.length || !R.length) continue;
+      const gain = data.length * variance(vals)
+        - L.length * variance(L.map(d => d[targetKey]))
+        - R.length * variance(R.map(d => d[targetKey]));
+      if (gain > bestGain) { bestGain = gain; bestFeat = feat; bestThresh = thresh; }
+    }
+  }
+  if (!bestFeat) return { leaf: true, value: mean };
+  return {
+    feat: bestFeat, thresh: bestThresh,
+    left:  buildTree(data.filter(d => d[bestFeat] <= bestThresh), features, targetKey, depth + 1, maxDepth, rng),
+    right: buildTree(data.filter(d => d[bestFeat] >  bestThresh), features, targetKey, depth + 1, maxDepth, rng),
+  };
+}
+
+function predictTree(tree, sample) {
+  if (tree.leaf) return tree.value;
+  return sample[tree.feat] <= tree.thresh
+    ? predictTree(tree.left, sample)
+    : predictTree(tree.right, sample);
+}
+
+function buildForest(data, features, targetKey, nTrees, maxDepth) {
+  const trees = [];
+  for (let i = 0; i < nTrees; i++) {
+    const rng = mulberry32(i * 1000 + 42);
+    // bootstrap bag — índices seguros
+    const bag = [];
+    for (let j = 0; j < data.length; j++) {
+      const idx = Math.floor(rng() * data.length);
+      if (data[idx]) bag.push(data[idx]);
+    }
+    trees.push(buildTree(bag, features, targetKey, 0, maxDepth, rng));
+  }
+  return trees;
+}
+
+function forestPredict(trees, sample) {
+  const preds = trees.map(t => predictTree(t, sample));
+  return preds.reduce((a, b) => a + b, 0) / preds.length;
+}
+
+// ── DADOS ──────────────────────────────────────────────
+const POS_MAP = { Atacante: 3, Meia: 2, Defensor: 1, Goleiro: 0 };
+const FEATS_NOTA = ["velocidade", "chute", "passe", "resistencia", "drible"];
+const FEATS_GOLS = ["posicao_cod", "nota_geral", "chute", "jogos", "assistencias"];
+
+const golsData = GOLS.map(d => ({ ...d, posicao_cod: POS_MAP[d.posicao] ?? 0 }));
+
+let rfNota = null, rfGols = null;
+
+// Treinar de forma assíncrona para não travar a UI
+function treinarModelos() {
+  try {
+    rfNota = buildForest(NOTAS, FEATS_NOTA, "nota_geral", 60, 7);
+    rfGols = buildForest(golsData, FEATS_GOLS, "gols", 60, 7);
+    document.getElementById("badge").textContent = "✅ Random Forest · 208 jogadores";
+    document.getElementById("btn-nota").disabled = false;
+    document.getElementById("btn-nota").textContent = "⚡ Calcular Nota";
+    document.getElementById("btn-gols").disabled = false;
+    document.getElementById("btn-gols").textContent = "⚡ Calcular Gols";
+  } catch(e) {
+    document.getElementById("badge").textContent = "❌ Erro no modelo";
+    console.error("Erro ao treinar:", e);
+  }
+}
+
+// ── SLIDERS ────────────────────────────────────────────
+const SDEFS_NOTA = [
+  {key:"velocidade",label:"⚡ Velocidade",min:20,max:99,val:80},
+  {key:"chute",label:"🎯 Chute",min:10,max:99,val:78},
+  {key:"passe",label:"🔄 Passe",min:20,max:99,val:75},
+  {key:"resistencia",label:"💪 Resistência",min:40,max:99,val:78},
+  {key:"drible",label:"🕺 Drible",min:10,max:99,val:76},
+];
+const SDEFS_GOLS = [
+  {key:"nota_geral",label:"⭐ Nota Geral",min:40,max:99,val:82},
+  {key:"chute",label:"🎯 Chute",min:10,max:99,val:78},
+  {key:"jogos",label:"📅 Jogos na Temporada",min:1,max:38,val:28},
+  {key:"assistencias",label:"🤝 Assistências",min:0,max:25,val:5},
+];
+
+function makeSliders(defs, cid) {
+  document.getElementById(cid).innerHTML = defs.map(d => `
+    <div class="slider-group">
+      <div class="slider-label">
+        <span>${d.label}</span>
+        <span class="sval" id="sv-${cid}-${d.key}">${d.val}</span>
+      </div>
+      <input type="range" min="${d.min}" max="${d.max}" value="${d.val}" id="sl-${cid}-${d.key}"
+        oninput="document.getElementById('sv-${cid}-${d.key}').textContent=this.value;updateRadar()">
+    </div>`).join('');
+}
+
+function getSliderVals(defs, cid) {
+  const out = {};
+  defs.forEach(d => { out[d.key] = parseFloat(document.getElementById(`sl-${cid}-${d.key}`).value); });
+  return out;
+}
+
+// ── RADAR ──────────────────────────────────────────────
+let radarChart;
+function initRadar() {
+  radarChart = new Chart(document.getElementById('radarChart').getContext('2d'), {
+    type: 'radar',
+    data: {
+      labels: ['Velocidade','Chute','Passe','Resistência','Drible'],
+      datasets: [{
+        label: 'Jogador', data: [80,78,75,78,76],
+        backgroundColor: 'rgba(22,163,74,.2)', borderColor: '#22c55e',
+        pointBackgroundColor: '#facc15', pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { r: { min: 0, max: 100,
+        grid: {color:'#173523'}, angleLines: {color:'#173523'},
+        pointLabels: {color:'#86efac',font:{size:10}}, ticks: {display:false}
+      }},
+      plugins: { legend: {display:false} }
+    }
+  });
+}
+
+function updateRadar() {
+  const v = getSliderVals(SDEFS_NOTA, 'sliders-nota');
+  radarChart.data.datasets[0].data = FEATS_NOTA.map(f => v[f]);
+  radarChart.update('none');
+}
+
+// ── PREVER NOTA ────────────────────────────────────────
+function preverNota() {
+  if (!rfNota) return;
+  const v = getSliderVals(SDEFS_NOTA, 'sliders-nota');
+  const pred = Math.min(99, Math.max(40, forestPredict(rfNota, v)));
+  document.getElementById('nota-val').textContent = pred.toFixed(1);
+  let tier = '', color = '';
+  if (pred >= 90)      { tier = '🏆 Craque Mundial';     color = 'var(--gold)'; }
+  else if (pred >= 85) { tier = '⭐ Elite';              color = 'var(--line)'; }
+  else if (pred >= 78) { tier = '✅ Bom Jogador';        color = '#86efac'; }
+  else if (pred >= 65) { tier = '📈 Jogador Regular';   color = 'var(--muted)'; }
+  else                 { tier = '📉 Em Desenvolvimento'; color = 'var(--warn)'; }
+  const sub = document.getElementById('nota-tier');
+  sub.textContent = tier; sub.style.color = color;
+  updateRadar();
+}
+
+// ── PREVER GOLS ────────────────────────────────────────
+function preverGols() {
+  if (!rfGols) return;
+  const v = getSliderVals(SDEFS_GOLS, 'sliders-gols');
+  const pos = document.getElementById('sel-posicao').value;
+  const sample = { ...v, posicao_cod: POS_MAP[pos] };
+  const pred = Math.max(0, forestPredict(rfGols, sample));
+  document.getElementById('gols-val').textContent = pred.toFixed(1);
+  let tier = '';
+  if (pred >= 25)      tier = '🔥 Artilheiro Elite';
+  else if (pred >= 18) tier = '⭐ Goleador';
+  else if (pred >= 10) tier = '✅ Contribuidor Regular';
+  else if (pred >= 5)  tier = '📈 Participação Moderada';
+  else                 tier = '🛡️ Sem foco ofensivo';
+  document.getElementById('gols-tier').textContent = tier;
+
+  const similar = golsData
+    .filter(d => d.posicao === pos)
+    .map(d => ({ ...d, diff: Math.abs(d.gols - pred) }))
+    .sort((a, b) => a.diff - b.diff).slice(0, 5);
+  document.getElementById('similares-list').innerHTML = similar.map(d => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
+      <span style="font-weight:500">${d.jogador}</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="pos-badge pos-${d.posicao}">${d.posicao}</span>
+        <span style="color:var(--gold);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">${d.gols} gols</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── TABELA ─────────────────────────────────────────────
+let currentFilter = 'Todos', currentSearch = '', sortKey = 'nota_geral', sortDir = -1;
+const golsMap = {};
+GOLS.forEach(d => { golsMap[d.jogador] = { posicao: d.posicao, gols: d.gols }; });
+
+function notaColor(n) {
+  if (n >= 88) return '#facc15'; if (n >= 82) return '#22c55e';
+  if (n >= 72) return '#86efac'; if (n >= 62) return '#f97316'; return '#ef4444';
+}
+
+function renderTabela() {
+  let data = NOTAS.map(d => ({ ...d, ...(golsMap[d.jogador] || { posicao: '—', gols: '—' }) }));
+  if (currentFilter !== 'Todos') data = data.filter(d => d.posicao === currentFilter);
+  if (currentSearch) data = data.filter(d => d.jogador.toLowerCase().includes(currentSearch.toLowerCase()));
+  data.sort((a, b) => sortDir * (typeof a[sortKey] === 'string' ? a[sortKey].localeCompare(b[sortKey]) : a[sortKey] - b[sortKey]));
+  document.getElementById('tbody').innerHTML = data.map((d, i) => `
+    <tr>
+      <td style="color:var(--muted);font-size:10px">${i+1}</td>
+      <td style="font-weight:600;white-space:nowrap">${d.jogador}</td>
+      <td><span class="pos-badge pos-${d.posicao}">${d.posicao}</span></td>
+      <td><span class="pill-nota" style="background:${notaColor(d.nota_geral)}18;color:${notaColor(d.nota_geral)}">${d.nota_geral}</span></td>
+      <td>${d.velocidade}</td><td>${d.chute}</td><td>${d.passe}</td>
+      <td>${d.resistencia}</td><td>${d.drible}</td>
+      <td style="color:var(--gold);font-weight:600">${d.gols}</td>
+    </tr>`).join('');
+}
+
+function filtrarPos(pos, el) {
+  currentFilter = pos;
+  document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); renderTabela();
+}
+function filtrarTabela(v) { currentSearch = v; renderTabela(); }
+function sortTable(key) {
+  if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = -1; }
+  renderTabela();
+}
+
+// ── STATS TOP ──────────────────────────────────────────
+function renderStatsTop() {
+  const avgNota = (NOTAS.reduce((s, d) => s + d.nota_geral, 0) / NOTAS.length).toFixed(1);
+  const topGols = GOLS.reduce((a, b) => a.gols > b.gols ? a : b);
+  document.getElementById('stats-top').innerHTML = `
+    <div class="stat-card"><div class="num">${NOTAS.length}</div><div class="lbl">Jogadores no Dataset</div></div>
+    <div class="stat-card"><div class="num">${avgNota}</div><div class="lbl">Nota Média Geral</div></div>
+    <div class="stat-card"><div class="num">${topGols.gols}</div><div class="lbl">Recorde de Gols · ${topGols.jogador}</div></div>`;
+}
+
+// ── FEAT BARS ──────────────────────────────────────────
+function renderFeatBars(feats, vals, cid) {
+  const sorted = feats.map((f, i) => ({ f, v: vals[i] })).sort((a, b) => b.v - a.v);
+  document.getElementById(cid).innerHTML = sorted.map(({ f, v }) => `
+    <div class="stat-bar-row">
+      <div class="stat-bar-label"><span>${f}</span><span style="color:var(--gold)">${(v*100).toFixed(1)}%</span></div>
+      <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${v*100}%"></div></div>
+    </div>`).join('');
+}
+
+// ── CHARTS ─────────────────────────────────────────────
+function renderCharts() {
+  const bins = [40,45,50,55,60,65,70,75,80,85,90,95,100];
+  const counts = Array(bins.length - 1).fill(0);
+  NOTAS.forEach(d => { const i = bins.findIndex(b => b > d.nota_geral) - 1; if (i >= 0) counts[i]++; });
+  new Chart(document.getElementById('histNota'), {
+    type: 'bar',
+    data: { labels: bins.slice(0,-1).map((b,i) => `${b}–${bins[i+1]}`),
+            datasets: [{ data: counts, backgroundColor: '#16a34a', borderRadius: 4 }] },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:'#86efac'},grid:{color:'#173523'}},
+              y:{ticks:{color:'#86efac'},grid:{color:'#173523'}}} }
+  });
+
+  const posMedia = {};
+  GOLS.forEach(d => {
+    if (!posMedia[d.posicao]) posMedia[d.posicao] = { s:0, n:0 };
+    posMedia[d.posicao].s += d.gols; posMedia[d.posicao].n++;
+  });
+  const posLabels = ['Atacante','Meia','Defensor','Goleiro'];
+  const posVals = posLabels.map(p => posMedia[p] ? (posMedia[p].s / posMedia[p].n).toFixed(1) : 0);
+  new Chart(document.getElementById('chartGolsPos'), {
+    type: 'bar',
+    data: { labels: posLabels,
+            datasets: [{ data: posVals, backgroundColor: ['#38bdf8','#86efac','#fbbf24','#f87171'], borderRadius: 6 }] },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:'#86efac'},grid:{color:'#173523'}},
+              y:{ticks:{color:'#86efac'},grid:{color:'#173523'}}} }
+  });
+
+  renderFeatBars(
+    ['Resistência','Chute','Passe','Drible','Velocidade'],
+    [0.912,0.033,0.026,0.019,0.010], 'feat-imp-nota');
+  renderFeatBars(
+    ['Chute','Posição','Assistências','Nota Geral','Jogos'],
+    [0.681,0.156,0.079,0.045,0.038], 'feat-imp-gols');
+}
+
+// ── NAV ────────────────────────────────────────────────
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── INIT ───────────────────────────────────────────────
+window.onload = () => {
+  makeSliders(SDEFS_NOTA, 'sliders-nota');
+  makeSliders(SDEFS_GOLS, 'sliders-gols');
+  initRadar();
+  renderTabela();
+  renderStatsTop();
+  renderCharts();
+  // treinar após render inicial para não bloquear a UI
+  setTimeout(treinarModelos, 50);
+};
+</script>
+</body>
+</html>

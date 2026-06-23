@@ -1,0 +1,1847 @@
+[
+  {
+    "jogador": "Vinicius Jr.",
+    "posicao": "Atacante",
+    "nota_geral": 91,
+    "chute": 82,
+    "jogos": 34,
+    "assistencias": 11,
+    "gols": 24
+  },
+  {
+    "jogador": "Lionel Messi",
+    "posicao": "Atacante",
+    "nota_geral": 93,
+    "chute": 88,
+    "jogos": 31,
+    "assistencias": 18,
+    "gols": 18
+  },
+  {
+    "jogador": "Kylian Mbappé",
+    "posicao": "Atacante",
+    "nota_geral": 93,
+    "chute": 92,
+    "jogos": 36,
+    "assistencias": 7,
+    "gols": 27
+  },
+  {
+    "jogador": "Erling Haaland",
+    "posicao": "Atacante",
+    "nota_geral": 92,
+    "chute": 94,
+    "jogos": 32,
+    "assistencias": 3,
+    "gols": 27
+  },
+  {
+    "jogador": "Rodri",
+    "posicao": "Meia",
+    "nota_geral": 90,
+    "chute": 71,
+    "jogos": 35,
+    "assistencias": 8,
+    "gols": 5
+  },
+  {
+    "jogador": "Kevin De Bruyne",
+    "posicao": "Meia",
+    "nota_geral": 91,
+    "chute": 86,
+    "jogos": 18,
+    "assistencias": 10,
+    "gols": 11
+  },
+  {
+    "jogador": "Pedri",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 9,
+    "gols": 5
+  },
+  {
+    "jogador": "Lamine Yamal",
+    "posicao": "Atacante",
+    "nota_geral": 86,
+    "chute": 80,
+    "jogos": 35,
+    "assistencias": 10,
+    "gols": 11
+  },
+  {
+    "jogador": "Bukayo Saka",
+    "posicao": "Atacante",
+    "nota_geral": 87,
+    "chute": 82,
+    "jogos": 36,
+    "assistencias": 13,
+    "gols": 16
+  },
+  {
+    "jogador": "Harry Kane",
+    "posicao": "Atacante",
+    "nota_geral": 90,
+    "chute": 91,
+    "jogos": 34,
+    "assistencias": 8,
+    "gols": 27
+  },
+  {
+    "jogador": "Rúben Dias",
+    "posicao": "Defensor",
+    "nota_geral": 87,
+    "chute": 58,
+    "jogos": 33,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Virgil van Dijk",
+    "posicao": "Defensor",
+    "nota_geral": 88,
+    "chute": 63,
+    "jogos": 32,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Thibaut Courtois",
+    "posicao": "Goleiro",
+    "nota_geral": 88,
+    "chute": 20,
+    "jogos": 35,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Alisson Becker",
+    "posicao": "Goleiro",
+    "nota_geral": 88,
+    "chute": 20,
+    "jogos": 34,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Raphinha",
+    "posicao": "Atacante",
+    "nota_geral": 86,
+    "chute": 83,
+    "jogos": 35,
+    "assistencias": 12,
+    "gols": 16
+  },
+  {
+    "jogador": "Neymar Jr.",
+    "posicao": "Atacante",
+    "nota_geral": 87,
+    "chute": 85,
+    "jogos": 28,
+    "assistencias": 12,
+    "gols": 18
+  },
+  {
+    "jogador": "Mohamed Salah",
+    "posicao": "Atacante",
+    "nota_geral": 89,
+    "chute": 86,
+    "jogos": 35,
+    "assistencias": 13,
+    "gols": 25
+  },
+  {
+    "jogador": "Sadio Mané",
+    "posicao": "Atacante",
+    "nota_geral": 85,
+    "chute": 82,
+    "jogos": 32,
+    "assistencias": 8,
+    "gols": 16
+  },
+  {
+    "jogador": "Robert Lewandowski",
+    "posicao": "Atacante",
+    "nota_geral": 91,
+    "chute": 93,
+    "jogos": 34,
+    "assistencias": 6,
+    "gols": 30
+  },
+  {
+    "jogador": "Karim Benzema",
+    "posicao": "Atacante",
+    "nota_geral": 89,
+    "chute": 88,
+    "jogos": 29,
+    "assistencias": 9,
+    "gols": 19
+  },
+  {
+    "jogador": "Antoine Griezmann",
+    "posicao": "Atacante",
+    "nota_geral": 88,
+    "chute": 84,
+    "jogos": 35,
+    "assistencias": 10,
+    "gols": 17
+  },
+  {
+    "jogador": "Paulo Dybala",
+    "posicao": "Atacante",
+    "nota_geral": 87,
+    "chute": 83,
+    "jogos": 28,
+    "assistencias": 8,
+    "gols": 13
+  },
+  {
+    "jogador": "Lautaro Martínez",
+    "posicao": "Atacante",
+    "nota_geral": 88,
+    "chute": 88,
+    "jogos": 33,
+    "assistencias": 5,
+    "gols": 22
+  },
+  {
+    "jogador": "Marcus Rashford",
+    "posicao": "Atacante",
+    "nota_geral": 85,
+    "chute": 80,
+    "jogos": 33,
+    "assistencias": 6,
+    "gols": 17
+  },
+  {
+    "jogador": "Jadon Sancho",
+    "posicao": "Atacante",
+    "nota_geral": 83,
+    "chute": 78,
+    "jogos": 25,
+    "assistencias": 5,
+    "gols": 8
+  },
+  {
+    "jogador": "Phil Foden",
+    "posicao": "Meia",
+    "nota_geral": 88,
+    "chute": 82,
+    "jogos": 35,
+    "assistencias": 11,
+    "gols": 19
+  },
+  {
+    "jogador": "Jack Grealish",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 76,
+    "jogos": 30,
+    "assistencias": 9,
+    "gols": 7
+  },
+  {
+    "jogador": "Bernardo Silva",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 78,
+    "jogos": 36,
+    "assistencias": 10,
+    "gols": 11
+  },
+  {
+    "jogador": "Trent Alexander-Arnold",
+    "posicao": "Defensor",
+    "nota_geral": 87,
+    "chute": 72,
+    "jogos": 32,
+    "assistencias": 11,
+    "gols": 4
+  },
+  {
+    "jogador": "Andrew Robertson",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 68,
+    "jogos": 33,
+    "assistencias": 8,
+    "gols": 2
+  },
+  {
+    "jogador": "João Cancelo",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 72,
+    "jogos": 30,
+    "assistencias": 7,
+    "gols": 3
+  },
+  {
+    "jogador": "Achraf Hakimi",
+    "posicao": "Defensor",
+    "nota_geral": 86,
+    "chute": 74,
+    "jogos": 34,
+    "assistencias": 8,
+    "gols": 4
+  },
+  {
+    "jogador": "Theo Hernández",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 74,
+    "jogos": 32,
+    "assistencias": 6,
+    "gols": 5
+  },
+  {
+    "jogador": "Marquinhos",
+    "posicao": "Defensor",
+    "nota_geral": 87,
+    "chute": 60,
+    "jogos": 33,
+    "assistencias": 2,
+    "gols": 3
+  },
+  {
+    "jogador": "David Alaba",
+    "posicao": "Defensor",
+    "nota_geral": 86,
+    "chute": 68,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 2
+  },
+  {
+    "jogador": "Antonio Rüdiger",
+    "posicao": "Defensor",
+    "nota_geral": 86,
+    "chute": 62,
+    "jogos": 33,
+    "assistencias": 1,
+    "gols": 3
+  },
+  {
+    "jogador": "Jules Koundé",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 64,
+    "jogos": 32,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Dayot Upamecano",
+    "posicao": "Defensor",
+    "nota_geral": 84,
+    "chute": 60,
+    "jogos": 30,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Matthijs de Ligt",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 62,
+    "jogos": 31,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Kalidou Koulibaly",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 62,
+    "jogos": 30,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Ederson",
+    "posicao": "Goleiro",
+    "nota_geral": 87,
+    "chute": 22,
+    "jogos": 35,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Marc-André ter Stegen",
+    "posicao": "Goleiro",
+    "nota_geral": 87,
+    "chute": 22,
+    "jogos": 30,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Gianluigi Donnarumma",
+    "posicao": "Goleiro",
+    "nota_geral": 87,
+    "chute": 20,
+    "jogos": 35,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Keylor Navas",
+    "posicao": "Goleiro",
+    "nota_geral": 85,
+    "chute": 20,
+    "jogos": 28,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Mike Maignan",
+    "posicao": "Goleiro",
+    "nota_geral": 86,
+    "chute": 20,
+    "jogos": 33,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Ilkay Gündogan",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 9,
+    "gols": 12
+  },
+  {
+    "jogador": "Joshua Kimmich",
+    "posicao": "Meia",
+    "nota_geral": 89,
+    "chute": 74,
+    "jogos": 34,
+    "assistencias": 12,
+    "gols": 7
+  },
+  {
+    "jogador": "Leon Goretzka",
+    "posicao": "Meia",
+    "nota_geral": 86,
+    "chute": 76,
+    "jogos": 30,
+    "assistencias": 6,
+    "gols": 8
+  },
+  {
+    "jogador": "Thomas Müller",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 76,
+    "jogos": 32,
+    "assistencias": 14,
+    "gols": 9
+  },
+  {
+    "jogador": "Leroy Sané",
+    "posicao": "Atacante",
+    "nota_geral": 86,
+    "chute": 80,
+    "jogos": 30,
+    "assistencias": 9,
+    "gols": 14
+  },
+  {
+    "jogador": "Serge Gnabry",
+    "posicao": "Atacante",
+    "nota_geral": 84,
+    "chute": 80,
+    "jogos": 26,
+    "assistencias": 6,
+    "gols": 10
+  },
+  {
+    "jogador": "Kingsley Coman",
+    "posicao": "Atacante",
+    "nota_geral": 84,
+    "chute": 76,
+    "jogos": 28,
+    "assistencias": 7,
+    "gols": 9
+  },
+  {
+    "jogador": "Kai Havertz",
+    "posicao": "Atacante",
+    "nota_geral": 84,
+    "chute": 80,
+    "jogos": 33,
+    "assistencias": 5,
+    "gols": 13
+  },
+  {
+    "jogador": "Christopher Nkunku",
+    "posicao": "Atacante",
+    "nota_geral": 86,
+    "chute": 80,
+    "jogos": 28,
+    "assistencias": 8,
+    "gols": 15
+  },
+  {
+    "jogador": "Dušan Vlahović",
+    "posicao": "Atacante",
+    "nota_geral": 85,
+    "chute": 88,
+    "jogos": 30,
+    "assistencias": 3,
+    "gols": 18
+  },
+  {
+    "jogador": "Nicolò Barella",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 76,
+    "jogos": 35,
+    "assistencias": 10,
+    "gols": 8
+  },
+  {
+    "jogador": "Marco Verratti",
+    "posicao": "Meia",
+    "nota_geral": 86,
+    "chute": 70,
+    "jogos": 28,
+    "assistencias": 8,
+    "gols": 3
+  },
+  {
+    "jogador": "Franck Kessié",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 72,
+    "jogos": 30,
+    "assistencias": 4,
+    "gols": 6
+  },
+  {
+    "jogador": "Sergej Milinković-Savić",
+    "posicao": "Meia",
+    "nota_geral": 86,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 8,
+    "gols": 10
+  },
+  {
+    "jogador": "Ciro Immobile",
+    "posicao": "Atacante",
+    "nota_geral": 85,
+    "chute": 88,
+    "jogos": 30,
+    "assistencias": 4,
+    "gols": 20
+  },
+  {
+    "jogador": "Romelu Lukaku",
+    "posicao": "Atacante",
+    "nota_geral": 85,
+    "chute": 86,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 16
+  },
+  {
+    "jogador": "Luka Modrić",
+    "posicao": "Meia",
+    "nota_geral": 88,
+    "chute": 76,
+    "jogos": 32,
+    "assistencias": 9,
+    "gols": 6
+  },
+  {
+    "jogador": "Mateo Kovačić",
+    "posicao": "Meia",
+    "nota_geral": 85,
+    "chute": 72,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 4
+  },
+  {
+    "jogador": "Marcelo Brozović",
+    "posicao": "Meia",
+    "nota_geral": 85,
+    "chute": 70,
+    "jogos": 32,
+    "assistencias": 6,
+    "gols": 4
+  },
+  {
+    "jogador": "Ilkay Gündogan",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 9,
+    "gols": 12
+  },
+  {
+    "jogador": "Granit Xhaka",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 72,
+    "jogos": 32,
+    "assistencias": 6,
+    "gols": 7
+  },
+  {
+    "jogador": "Yann Sommer",
+    "posicao": "Goleiro",
+    "nota_geral": 85,
+    "chute": 20,
+    "jogos": 34,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Eduardo Camavinga",
+    "posicao": "Meia",
+    "nota_geral": 85,
+    "chute": 70,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 4
+  },
+  {
+    "jogador": "Aurélien Tchouaméni",
+    "posicao": "Meia",
+    "nota_geral": 86,
+    "chute": 72,
+    "jogos": 32,
+    "assistencias": 3,
+    "gols": 3
+  },
+  {
+    "jogador": "Adrien Rabiot",
+    "posicao": "Meia",
+    "nota_geral": 83,
+    "chute": 72,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 6
+  },
+  {
+    "jogador": "Ousmane Dembélé",
+    "posicao": "Atacante",
+    "nota_geral": 86,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 12,
+    "gols": 10
+  },
+  {
+    "jogador": "Ansu Fati",
+    "posicao": "Atacante",
+    "nota_geral": 82,
+    "chute": 78,
+    "jogos": 22,
+    "assistencias": 4,
+    "gols": 7
+  },
+  {
+    "jogador": "Ferran Torres",
+    "posicao": "Atacante",
+    "nota_geral": 83,
+    "chute": 78,
+    "jogos": 28,
+    "assistencias": 5,
+    "gols": 10
+  },
+  {
+    "jogador": "Gavi",
+    "posicao": "Meia",
+    "nota_geral": 86,
+    "chute": 70,
+    "jogos": 34,
+    "assistencias": 8,
+    "gols": 5
+  },
+  {
+    "jogador": "Frenkie de Jong",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 72,
+    "jogos": 32,
+    "assistencias": 6,
+    "gols": 4
+  },
+  {
+    "jogador": "Cody Gakpo",
+    "posicao": "Atacante",
+    "nota_geral": 84,
+    "chute": 80,
+    "jogos": 32,
+    "assistencias": 7,
+    "gols": 14
+  },
+  {
+    "jogador": "Memphis Depay",
+    "posicao": "Atacante",
+    "nota_geral": 84,
+    "chute": 84,
+    "jogos": 26,
+    "assistencias": 5,
+    "gols": 12
+  },
+  {
+    "jogador": "Nathan Aké",
+    "posicao": "Defensor",
+    "nota_geral": 82,
+    "chute": 62,
+    "jogos": 28,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Stefan de Vrij",
+    "posicao": "Defensor",
+    "nota_geral": 83,
+    "chute": 60,
+    "jogos": 29,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Denzel Dumfries",
+    "posicao": "Defensor",
+    "nota_geral": 83,
+    "chute": 68,
+    "jogos": 30,
+    "assistencias": 6,
+    "gols": 3
+  },
+  {
+    "jogador": "Hakan Çalhanoğlu",
+    "posicao": "Meia",
+    "nota_geral": 85,
+    "chute": 76,
+    "jogos": 33,
+    "assistencias": 8,
+    "gols": 11
+  },
+  {
+    "jogador": "Wilfried Zaha",
+    "posicao": "Atacante",
+    "nota_geral": 82,
+    "chute": 76,
+    "jogos": 33,
+    "assistencias": 6,
+    "gols": 10
+  },
+  {
+    "jogador": "Eberechi Eze",
+    "posicao": "Meia",
+    "nota_geral": 82,
+    "chute": 76,
+    "jogos": 32,
+    "assistencias": 7,
+    "gols": 11
+  },
+  {
+    "jogador": "Michael Olise",
+    "posicao": "Atacante",
+    "nota_geral": 83,
+    "chute": 78,
+    "jogos": 28,
+    "assistencias": 8,
+    "gols": 10
+  },
+  {
+    "jogador": "Álvaro Morata",
+    "posicao": "Atacante",
+    "nota_geral": 83,
+    "chute": 82,
+    "jogos": 30,
+    "assistencias": 4,
+    "gols": 13
+  },
+  {
+    "jogador": "Dani Carvajal",
+    "posicao": "Defensor",
+    "nota_geral": 86,
+    "chute": 68,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 2
+  },
+  {
+    "jogador": "Ferland Mendy",
+    "posicao": "Defensor",
+    "nota_geral": 84,
+    "chute": 64,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 1
+  },
+  {
+    "jogador": "Lorenzo Pellegrini",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 78,
+    "jogos": 30,
+    "assistencias": 7,
+    "gols": 9
+  },
+  {
+    "jogador": "Tammy Abraham",
+    "posicao": "Atacante",
+    "nota_geral": 82,
+    "chute": 80,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 12
+  },
+  {
+    "jogador": "Ivan Perišić",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 76,
+    "jogos": 32,
+    "assistencias": 8,
+    "gols": 8
+  },
+  {
+    "jogador": "Timo Werner",
+    "posicao": "Atacante",
+    "nota_geral": 82,
+    "chute": 76,
+    "jogos": 28,
+    "assistencias": 6,
+    "gols": 9
+  },
+  {
+    "jogador": "Jorginho",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 70,
+    "jogos": 30,
+    "assistencias": 3,
+    "gols": 4
+  },
+  {
+    "jogador": "Presnel Kimpembe",
+    "posicao": "Defensor",
+    "nota_geral": 83,
+    "chute": 60,
+    "jogos": 26,
+    "assistencias": 0,
+    "gols": 1
+  },
+  {
+    "jogador": "Unai Simón",
+    "posicao": "Goleiro",
+    "nota_geral": 84,
+    "chute": 20,
+    "jogos": 34,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Remo Freuler",
+    "posicao": "Meia",
+    "nota_geral": 81,
+    "chute": 68,
+    "jogos": 30,
+    "assistencias": 4,
+    "gols": 4
+  },
+  {
+    "jogador": "Fabian Schär",
+    "posicao": "Defensor",
+    "nota_geral": 82,
+    "chute": 64,
+    "jogos": 30,
+    "assistencias": 2,
+    "gols": 3
+  },
+  {
+    "jogador": "Denis Zakaria",
+    "posicao": "Meia",
+    "nota_geral": 82,
+    "chute": 70,
+    "jogos": 26,
+    "assistencias": 2,
+    "gols": 3
+  },
+  {
+    "jogador": "Breel Embolo",
+    "posicao": "Atacante",
+    "nota_geral": 81,
+    "chute": 76,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 8
+  },
+  {
+    "jogador": "Rubén Vargas",
+    "posicao": "Atacante",
+    "nota_geral": 80,
+    "chute": 74,
+    "jogos": 28,
+    "assistencias": 4,
+    "gols": 6
+  },
+  {
+    "jogador": "Xherdan Shaqiri",
+    "posicao": "Meia",
+    "nota_geral": 81,
+    "chute": 76,
+    "jogos": 26,
+    "assistencias": 5,
+    "gols": 6
+  },
+  {
+    "jogador": "Manuel Akanji",
+    "posicao": "Defensor",
+    "nota_geral": 84,
+    "chute": 62,
+    "jogos": 32,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Edin Džeko",
+    "posicao": "Atacante",
+    "nota_geral": 82,
+    "chute": 82,
+    "jogos": 26,
+    "assistencias": 3,
+    "gols": 10
+  },
+  {
+    "jogador": "Ivan Rakitić",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 74,
+    "jogos": 30,
+    "assistencias": 6,
+    "gols": 5
+  },
+  {
+    "jogador": "Mario Pašalić",
+    "posicao": "Meia",
+    "nota_geral": 82,
+    "chute": 74,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 7
+  },
+  {
+    "jogador": "Dejan Lovren",
+    "posicao": "Defensor",
+    "nota_geral": 80,
+    "chute": 60,
+    "jogos": 24,
+    "assistencias": 0,
+    "gols": 1
+  },
+  {
+    "jogador": "Josip Šutalo",
+    "posicao": "Defensor",
+    "nota_geral": 80,
+    "chute": 60,
+    "jogos": 26,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Mateo Kovačić",
+    "posicao": "Meia",
+    "nota_geral": 85,
+    "chute": 72,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 4
+  },
+  {
+    "jogador": "Presnel Kimpembe",
+    "posicao": "Defensor",
+    "nota_geral": 83,
+    "chute": 60,
+    "jogos": 26,
+    "assistencias": 0,
+    "gols": 1
+  },
+  {
+    "jogador": "Jack Grealish",
+    "posicao": "Meia",
+    "nota_geral": 84,
+    "chute": 76,
+    "jogos": 30,
+    "assistencias": 9,
+    "gols": 7
+  },
+  {
+    "jogador": "Bukayo Saka",
+    "posicao": "Atacante",
+    "nota_geral": 87,
+    "chute": 82,
+    "jogos": 36,
+    "assistencias": 13,
+    "gols": 16
+  },
+  {
+    "jogador": "Pedri",
+    "posicao": "Meia",
+    "nota_geral": 87,
+    "chute": 78,
+    "jogos": 33,
+    "assistencias": 9,
+    "gols": 5
+  },
+  {
+    "jogador": "Jadon Sancho",
+    "posicao": "Atacante",
+    "nota_geral": 83,
+    "chute": 78,
+    "jogos": 25,
+    "assistencias": 5,
+    "gols": 8
+  },
+  {
+    "jogador": "Wout Weghorst",
+    "posicao": "Atacante",
+    "nota_geral": 80,
+    "chute": 80,
+    "jogos": 24,
+    "assistencias": 2,
+    "gols": 6
+  },
+  {
+    "jogador": "Davy Klaassen",
+    "posicao": "Meia",
+    "nota_geral": 79,
+    "chute": 68,
+    "jogos": 26,
+    "assistencias": 3,
+    "gols": 4
+  },
+  {
+    "jogador": "Kalidou Koulibaly",
+    "posicao": "Defensor",
+    "nota_geral": 85,
+    "chute": 62,
+    "jogos": 30,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Richarlison",
+    "posicao": "Atacante",
+    "nota_geral": 78,
+    "chute": 76,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 8
+  },
+  {
+    "jogador": "Darwin Núñez",
+    "posicao": "Atacante",
+    "nota_geral": 77,
+    "chute": 78,
+    "jogos": 30,
+    "assistencias": 4,
+    "gols": 11
+  },
+  {
+    "jogador": "Rasmus Højlund",
+    "posicao": "Atacante",
+    "nota_geral": 76,
+    "chute": 76,
+    "jogos": 26,
+    "assistencias": 2,
+    "gols": 10
+  },
+  {
+    "jogador": "Evan Ferguson",
+    "posicao": "Atacante",
+    "nota_geral": 74,
+    "chute": 76,
+    "jogos": 22,
+    "assistencias": 2,
+    "gols": 7
+  },
+  {
+    "jogador": "Alexis Mac Allister",
+    "posicao": "Meia",
+    "nota_geral": 79,
+    "chute": 70,
+    "jogos": 32,
+    "assistencias": 5,
+    "gols": 6
+  },
+  {
+    "jogador": "Moisés Caicedo",
+    "posicao": "Meia",
+    "nota_geral": 78,
+    "chute": 68,
+    "jogos": 33,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Ryan Gravenberch",
+    "posicao": "Meia",
+    "nota_geral": 77,
+    "chute": 68,
+    "jogos": 30,
+    "assistencias": 3,
+    "gols": 3
+  },
+  {
+    "jogador": "Kobbie Mainoo",
+    "posicao": "Meia",
+    "nota_geral": 74,
+    "chute": 66,
+    "jogos": 28,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Leny Yoro",
+    "posicao": "Defensor",
+    "nota_geral": 74,
+    "chute": 60,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 1
+  },
+  {
+    "jogador": "Castello Lukeba",
+    "posicao": "Defensor",
+    "nota_geral": 73,
+    "chute": 58,
+    "jogos": 26,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Hwang Hee-chan",
+    "posicao": "Atacante",
+    "nota_geral": 75,
+    "chute": 74,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 9
+  },
+  {
+    "jogador": "Callum Wilson",
+    "posicao": "Atacante",
+    "nota_geral": 76,
+    "chute": 78,
+    "jogos": 22,
+    "assistencias": 2,
+    "gols": 8
+  },
+  {
+    "jogador": "Sam Surridge",
+    "posicao": "Atacante",
+    "nota_geral": 60,
+    "chute": 66,
+    "jogos": 18,
+    "assistencias": 1,
+    "gols": 4
+  },
+  {
+    "jogador": "Kieffer Moore",
+    "posicao": "Atacante",
+    "nota_geral": 61,
+    "chute": 64,
+    "jogos": 20,
+    "assistencias": 1,
+    "gols": 5
+  },
+  {
+    "jogador": "Colby Bishop",
+    "posicao": "Atacante",
+    "nota_geral": 58,
+    "chute": 64,
+    "jogos": 18,
+    "assistencias": 1,
+    "gols": 4
+  },
+  {
+    "jogador": "Harry Cornick",
+    "posicao": "Atacante",
+    "nota_geral": 57,
+    "chute": 58,
+    "jogos": 20,
+    "assistencias": 2,
+    "gols": 3
+  },
+  {
+    "jogador": "Jonson Clarke-Harris",
+    "posicao": "Atacante",
+    "nota_geral": 60,
+    "chute": 68,
+    "jogos": 22,
+    "assistencias": 1,
+    "gols": 6
+  },
+  {
+    "jogador": "Michael Smith",
+    "posicao": "Atacante",
+    "nota_geral": 58,
+    "chute": 64,
+    "jogos": 20,
+    "assistencias": 1,
+    "gols": 4
+  },
+  {
+    "jogador": "Kayden Jackson",
+    "posicao": "Atacante",
+    "nota_geral": 56,
+    "chute": 58,
+    "jogos": 18,
+    "assistencias": 1,
+    "gols": 3
+  },
+  {
+    "jogador": "Tyler Roberts",
+    "posicao": "Meia",
+    "nota_geral": 62,
+    "chute": 62,
+    "jogos": 20,
+    "assistencias": 2,
+    "gols": 3
+  },
+  {
+    "jogador": "Maxime Lopez",
+    "posicao": "Meia",
+    "nota_geral": 71,
+    "chute": 62,
+    "jogos": 24,
+    "assistencias": 3,
+    "gols": 2
+  },
+  {
+    "jogador": "Luca Connell",
+    "posicao": "Meia",
+    "nota_geral": 50,
+    "chute": 50,
+    "jogos": 16,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Ryan Longman",
+    "posicao": "Atacante",
+    "nota_geral": 55,
+    "chute": 56,
+    "jogos": 18,
+    "assistencias": 1,
+    "gols": 3
+  },
+  {
+    "jogador": "Jordan Pickford",
+    "posicao": "Goleiro",
+    "nota_geral": 82,
+    "chute": 18,
+    "jogos": 34,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Sam Johnstone",
+    "posicao": "Goleiro",
+    "nota_geral": 76,
+    "chute": 16,
+    "jogos": 30,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Vicente Guaita",
+    "posicao": "Goleiro",
+    "nota_geral": 74,
+    "chute": 16,
+    "jogos": 28,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Scott Carson",
+    "posicao": "Goleiro",
+    "nota_geral": 62,
+    "chute": 14,
+    "jogos": 10,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Adam Davies",
+    "posicao": "Goleiro",
+    "nota_geral": 58,
+    "chute": 12,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Jamie McCart",
+    "posicao": "Defensor",
+    "nota_geral": 51,
+    "chute": 44,
+    "jogos": 18,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Bobby Thomas",
+    "posicao": "Defensor",
+    "nota_geral": 54,
+    "chute": 50,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Jake Turner",
+    "posicao": "Goleiro",
+    "nota_geral": 44,
+    "chute": 20,
+    "jogos": 18,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Ben Hinchliffe",
+    "posicao": "Goleiro",
+    "nota_geral": 43,
+    "chute": 18,
+    "jogos": 12,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Nathan Baxter",
+    "posicao": "Goleiro",
+    "nota_geral": 42,
+    "chute": 16,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Pontus Dahlberg",
+    "posicao": "Goleiro",
+    "nota_geral": 41,
+    "chute": 18,
+    "jogos": 10,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Tom King",
+    "posicao": "Goleiro",
+    "nota_geral": 43,
+    "chute": 20,
+    "jogos": 15,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Ben Killip",
+    "posicao": "Goleiro",
+    "nota_geral": 41,
+    "chute": 14,
+    "jogos": 8,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Joel Dixon",
+    "posicao": "Goleiro",
+    "nota_geral": 43,
+    "chute": 16,
+    "jogos": 14,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Matija Sarkic",
+    "posicao": "Goleiro",
+    "nota_geral": 48,
+    "chute": 22,
+    "jogos": 22,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Cian Harries",
+    "posicao": "Defensor",
+    "nota_geral": 47,
+    "chute": 36,
+    "jogos": 20,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Ryan Astley",
+    "posicao": "Defensor",
+    "nota_geral": 46,
+    "chute": 32,
+    "jogos": 18,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Liam Gordon",
+    "posicao": "Defensor",
+    "nota_geral": 45,
+    "chute": 34,
+    "jogos": 22,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Tom Brewitt",
+    "posicao": "Defensor",
+    "nota_geral": 46,
+    "chute": 30,
+    "jogos": 16,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Zak Jules",
+    "posicao": "Defensor",
+    "nota_geral": 44,
+    "chute": 28,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 0
+  },
+  {
+    "jogador": "Curtis Tilt",
+    "posicao": "Defensor",
+    "nota_geral": 53,
+    "chute": 36,
+    "jogos": 26,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Anthony O'Connor",
+    "posicao": "Defensor",
+    "nota_geral": 52,
+    "chute": 34,
+    "jogos": 28,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "George Johnston",
+    "posicao": "Defensor",
+    "nota_geral": 54,
+    "chute": 34,
+    "jogos": 24,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Corey Whelan",
+    "posicao": "Defensor",
+    "nota_geral": 53,
+    "chute": 36,
+    "jogos": 22,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Liam Lindsay",
+    "posicao": "Defensor",
+    "nota_geral": 52,
+    "chute": 36,
+    "jogos": 25,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Ciaran Brennan",
+    "posicao": "Defensor",
+    "nota_geral": 51,
+    "chute": 32,
+    "jogos": 20,
+    "assistencias": 0,
+    "gols": 1
+  },
+  {
+    "jogador": "Niall Canavan",
+    "posicao": "Defensor",
+    "nota_geral": 52,
+    "chute": 30,
+    "jogos": 28,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Jake Forster-Caskey",
+    "posicao": "Defensor",
+    "nota_geral": 61,
+    "chute": 52,
+    "jogos": 30,
+    "assistencias": 3,
+    "gols": 3
+  },
+  {
+    "jogador": "Theo Archibald",
+    "posicao": "Meia",
+    "nota_geral": 48,
+    "chute": 38,
+    "jogos": 16,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Remeao Hutton",
+    "posicao": "Meia",
+    "nota_geral": 47,
+    "chute": 38,
+    "jogos": 18,
+    "assistencias": 2,
+    "gols": 2
+  },
+  {
+    "jogador": "Max Melbourne",
+    "posicao": "Meia",
+    "nota_geral": 45,
+    "chute": 32,
+    "jogos": 12,
+    "assistencias": 1,
+    "gols": 1
+  },
+  {
+    "jogador": "Rekeem Harper",
+    "posicao": "Meia",
+    "nota_geral": 48,
+    "chute": 38,
+    "jogos": 20,
+    "assistencias": 3,
+    "gols": 3
+  },
+  {
+    "jogador": "Liam Bridcutt",
+    "posicao": "Meia",
+    "nota_geral": 45,
+    "chute": 30,
+    "jogos": 22,
+    "assistencias": 2,
+    "gols": 1
+  },
+  {
+    "jogador": "Regan Slater",
+    "posicao": "Meia",
+    "nota_geral": 56,
+    "chute": 46,
+    "jogos": 28,
+    "assistencias": 4,
+    "gols": 4
+  },
+  {
+    "jogador": "Kieran Dowell",
+    "posicao": "Meia",
+    "nota_geral": 57,
+    "chute": 52,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 6
+  },
+  {
+    "jogador": "Kyle Dempsey",
+    "posicao": "Meia",
+    "nota_geral": 57,
+    "chute": 50,
+    "jogos": 28,
+    "assistencias": 4,
+    "gols": 5
+  },
+  {
+    "jogador": "Alex Kenyon",
+    "posicao": "Meia",
+    "nota_geral": 53,
+    "chute": 44,
+    "jogos": 24,
+    "assistencias": 3,
+    "gols": 3
+  },
+  {
+    "jogador": "Louis Reed",
+    "posicao": "Meia",
+    "nota_geral": 55,
+    "chute": 44,
+    "jogos": 26,
+    "assistencias": 4,
+    "gols": 4
+  },
+  {
+    "jogador": "Sean Clare",
+    "posicao": "Meia",
+    "nota_geral": 54,
+    "chute": 48,
+    "jogos": 24,
+    "assistencias": 3,
+    "gols": 4
+  },
+  {
+    "jogador": "Lewis Wing",
+    "posicao": "Meia",
+    "nota_geral": 61,
+    "chute": 58,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 7
+  },
+  {
+    "jogador": "Callum Brittain",
+    "posicao": "Meia",
+    "nota_geral": 63,
+    "chute": 56,
+    "jogos": 32,
+    "assistencias": 6,
+    "gols": 7
+  },
+  {
+    "jogador": "Scott Twine",
+    "posicao": "Meia",
+    "nota_geral": 64,
+    "chute": 62,
+    "jogos": 32,
+    "assistencias": 7,
+    "gols": 8
+  },
+  {
+    "jogador": "Elliot Lee",
+    "posicao": "Meia",
+    "nota_geral": 62,
+    "chute": 60,
+    "jogos": 28,
+    "assistencias": 5,
+    "gols": 6
+  },
+  {
+    "jogador": "Nathan Sheron",
+    "posicao": "Meia",
+    "nota_geral": 61,
+    "chute": 56,
+    "jogos": 26,
+    "assistencias": 4,
+    "gols": 5
+  },
+  {
+    "jogador": "Luke Matheson",
+    "posicao": "Atacante",
+    "nota_geral": 48,
+    "chute": 36,
+    "jogos": 14,
+    "assistencias": 1,
+    "gols": 3
+  },
+  {
+    "jogador": "Kgaogelo Chauke",
+    "posicao": "Atacante",
+    "nota_geral": 49,
+    "chute": 40,
+    "jogos": 16,
+    "assistencias": 2,
+    "gols": 4
+  },
+  {
+    "jogador": "Ellis Simms",
+    "posicao": "Atacante",
+    "nota_geral": 49,
+    "chute": 44,
+    "jogos": 18,
+    "assistencias": 2,
+    "gols": 5
+  },
+  {
+    "jogador": "Theo Vassell",
+    "posicao": "Atacante",
+    "nota_geral": 46,
+    "chute": 36,
+    "jogos": 12,
+    "assistencias": 1,
+    "gols": 2
+  },
+  {
+    "jogador": "Will Jenkins-Davies",
+    "posicao": "Atacante",
+    "nota_geral": 47,
+    "chute": 34,
+    "jogos": 14,
+    "assistencias": 1,
+    "gols": 3
+  },
+  {
+    "jogador": "Ben Purrington",
+    "posicao": "Atacante",
+    "nota_geral": 55,
+    "chute": 38,
+    "jogos": 22,
+    "assistencias": 2,
+    "gols": 4
+  },
+  {
+    "jogador": "Frazer Blake-Tracy",
+    "posicao": "Atacante",
+    "nota_geral": 55,
+    "chute": 48,
+    "jogos": 24,
+    "assistencias": 3,
+    "gols": 6
+  },
+  {
+    "jogador": "Josh Windass",
+    "posicao": "Atacante",
+    "nota_geral": 59,
+    "chute": 58,
+    "jogos": 28,
+    "assistencias": 5,
+    "gols": 9
+  },
+  {
+    "jogador": "Mallik Wilks",
+    "posicao": "Atacante",
+    "nota_geral": 58,
+    "chute": 56,
+    "jogos": 26,
+    "assistencias": 4,
+    "gols": 8
+  },
+  {
+    "jogador": "Florian Jozefzoon",
+    "posicao": "Atacante",
+    "nota_geral": 57,
+    "chute": 54,
+    "jogos": 24,
+    "assistencias": 3,
+    "gols": 7
+  },
+  {
+    "jogador": "Tom Eaves",
+    "posicao": "Atacante",
+    "nota_geral": 56,
+    "chute": 58,
+    "jogos": 26,
+    "assistencias": 2,
+    "gols": 8
+  },
+  {
+    "jogador": "Josh Magennis",
+    "posicao": "Atacante",
+    "nota_geral": 58,
+    "chute": 58,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 9
+  },
+  {
+    "jogador": "Liam Millar",
+    "posicao": "Atacante",
+    "nota_geral": 62,
+    "chute": 58,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 10
+  },
+  {
+    "jogador": "Tom Bradshaw",
+    "posicao": "Atacante",
+    "nota_geral": 62,
+    "chute": 64,
+    "jogos": 30,
+    "assistencias": 3,
+    "gols": 11
+  },
+  {
+    "jogador": "Ryan Hardie",
+    "posicao": "Atacante",
+    "nota_geral": 61,
+    "chute": 62,
+    "jogos": 28,
+    "assistencias": 4,
+    "gols": 10
+  },
+  {
+    "jogador": "Dan Nlundulu",
+    "posicao": "Atacante",
+    "nota_geral": 60,
+    "chute": 62,
+    "jogos": 26,
+    "assistencias": 2,
+    "gols": 9
+  },
+  {
+    "jogador": "James Norwood",
+    "posicao": "Atacante",
+    "nota_geral": 63,
+    "chute": 64,
+    "jogos": 32,
+    "assistencias": 4,
+    "gols": 11
+  },
+  {
+    "jogador": "Luke Varney",
+    "posicao": "Atacante",
+    "nota_geral": 60,
+    "chute": 62,
+    "jogos": 28,
+    "assistencias": 3,
+    "gols": 9
+  },
+  {
+    "jogador": "Joe Ironside",
+    "posicao": "Atacante",
+    "nota_geral": 60,
+    "chute": 64,
+    "jogos": 28,
+    "assistencias": 2,
+    "gols": 10
+  },
+  {
+    "jogador": "Nathan Broadhead",
+    "posicao": "Atacante",
+    "nota_geral": 64,
+    "chute": 62,
+    "jogos": 30,
+    "assistencias": 5,
+    "gols": 12
+  },
+  {
+    "jogador": "Kwame Poku",
+    "posicao": "Atacante",
+    "nota_geral": 63,
+    "chute": 58,
+    "jogos": 28,
+    "assistencias": 5,
+    "gols": 10
+  },
+  {
+    "jogador": "Hiram Boateng",
+    "posicao": "Atacante",
+    "nota_geral": 62,
+    "chute": 56,
+    "jogos": 26,
+    "assistencias": 4,
+    "gols": 9
+  },
+  {
+    "jogador": "Denzeil Boadu",
+    "posicao": "Atacante",
+    "nota_geral": 62,
+    "chute": 60,
+    "jogos": 28,
+    "assistencias": 4,
+    "gols": 10
+  }
+]
